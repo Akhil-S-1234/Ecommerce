@@ -1,0 +1,153 @@
+<%- include('header') %>
+
+<!-- Add this to the <head> section of your HTML -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha384-cZcQCJNj1y4Xb0y7x3uH8+jsTrZM4uCXDyvkWvX8ZiPJeaVmVK0D2XJJmYop8B4g" crossorigin="anonymous">
+
+<style>
+    
+
+    .categ {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            background-color: #fff; 
+            color: #000; /* Set your text color */
+            font-family: 'Arial', sans-serif;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            margin-left: 75px;
+        }
+
+        .card-container {
+            margin-left: 175px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        .card-container a {
+        text-decoration: none;
+    }
+        .card {
+            cursor: pointer;
+            border: 1px solid #000; /* Set your border color */
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-out;
+            margin: 50px;
+            width: 220px;
+            height: 300px;
+            background-color: #e2e2e2;
+
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #000; /* Set your border color */
+        }
+
+        .card-content {
+            padding: 16px;
+            text-align: left;
+        }
+
+      .card  h4 {
+            margin-top: 0;
+            color: #000; /* Set your heading color */
+        }
+
+        .card  p {
+            margin: 0;
+            color: #333; /* Set your paragraph text color */
+        }
+
+        .card .price {
+            font-weight: bold;
+            color: #000; /* Set your price color */
+        }
+
+        .card  .rating {
+            color: #777; /* Set your rating color */
+        }
+        .card .wishlist-icon {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: #777; /* Set your default color */
+        font-size: 20px;
+        cursor: pointer;
+        transition: color 0.3s ease; /* Add transition for color change */
+    }
+
+    .card:hover .wishlist-icon {
+        color: red; /* Set your desired color on hover */
+    }
+    .price-container {
+    display: flex;
+    align-items: baseline;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #999; /* Optional: Gray color for original price */
+    margin-right: 8px; /* Optional: Adjust spacing between prices */
+}
+
+.discounted-price {
+    color: #e44d26; /* Optional: Customize color for discounted price */
+    font-weight: bold; /* Optional: Make the discounted price bold */
+}
+.no-results {
+        margin: 10px;
+        margin-left: 150px;
+        text-align: center;
+        color: #777;
+    }
+    
+
+</style>
+
+<div class="categ">
+    <h1>Search Results</h1>
+
+    <% if (products.length === 0) { %>
+        <!-- Display "No Results Found" message when there are no products -->
+        <p class="no-results">No results found.</p>
+    <% } else { %>
+        <div class="card-container">
+            <% products.forEach(product => { %>
+                <a href="/display/<%= product.name %>">
+                    <div class="card">
+                        <!-- Love icon for wishlisting -->
+                        <i class="fas fa-heart wishlist-icon"></i>
+                        <!-- Product image and content -->
+                        <img src="<%= product.productImages[0] %>" alt="<%= product.name %>">
+                        <div class="card-content">
+                            <h4><%= product.name %></h4>
+                            <div class="price-container">
+                                <% if (product.offerprice && product.offerprice > 0) { %>
+                                    <span class="original-price">₹<%= product.price %></span>
+                                    <span class="discounted-price">₹<%= product.offerprice %></span>
+                                <% } else { %>
+                                    <span class="regular-price">₹<%= product.price %></span>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            <% }); %>
+        </div>
+    <% } %>
+</div>
+
+<%- include('footer') %>

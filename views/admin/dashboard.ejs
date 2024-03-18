@@ -1,0 +1,348 @@
+<%- include('header') %>
+
+<style>
+        body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+    }
+
+    .content-body {
+        padding: 20px;
+    }
+
+    .stats {
+        display: flex;
+        justify-content: space-around;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .stat {
+        flex: 1;
+        min-width: 100px;
+        max-width: 120px;
+        height: 120px;
+        background-color: #3498db;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .chart1 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 400px;
+        margin-top: 100px;
+        margin-bottom: 80px;
+        
+    }
+
+    #timeInterval {
+        margin-bottom: 20px;
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #3498db;
+    }
+
+    #salesOrdersChart {
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .char{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 20px;
+    
+    }
+    .chart {
+        width: calc(50% - 20px);
+        margin-bottom: 20px;
+        min-height: 400px;
+        box-sizing: border-box;
+        background-color: #ffffff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        padding: 20px;
+    }
+
+    .chart h3 {
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .chart ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .chart li {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .chart li span {
+        font-weight: bold;
+        color: #3498db;
+    }
+
+    .pie canvas {
+        width: 80%;
+        height: 80%;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="content-body">
+    <div class="stats">
+        <div class="stat">
+            <h3><%= orderCount %></h3>
+            <p>Orders</p>
+        </div>
+        <div class="stat">
+            <h3><%= customerCount %></h3>
+            <p>Customers</p>
+        </div>
+        <div class="stat">
+            <h3><%= productCount %></h3>
+            <p>Products</p>
+        </div>
+    </div>
+    <div class="chart1">
+        <label for="timeInterval">Select Time Interval:</label>
+        <select id="timeInterval" onchange="updateChart()">
+            <option value="daily">Daily</option>
+            <option value="monthly">Monthly</option>
+            <option value="yearly">Yearly</option>
+        </select>
+        <canvas id="salesOrdersChart"></canvas>
+    </div>
+    <div class="char">
+    <div class="chart">
+        <h3>Top 10 Selling Products</h3>
+        <ul>
+            <%  productPurchaseCounts.sort((a, b) => b.purchaseCount - a.purchaseCount); %>
+            <% for (let i = 0; i < Math.min(productPurchaseCounts.length, 10); i++) { %>
+                <li>
+                    <span><%= productPurchaseCounts[i].productName %></span>
+                    <span><%= productPurchaseCounts[i].purchaseCount %> sales</span>
+                </li>
+            <% } %>
+        </ul>
+    </div>
+    <div class="chart">
+        <h3>Order Source Chart</h3>
+        <div class="pie">
+        <canvas id="orderSourceChart"></canvas>
+    </div>
+    </div>
+    <div class="chart">
+        <h3>Sales vs. Time</h3>
+        <canvas id="myLineChart"></canvas>
+    </div>
+    <div class="chart">
+        <h3>Heatmap</h3>
+        <canvas id="heatmap"></canvas>
+    </div>
+</div>
+</div>
+
+
+<!-- Add this to the <head> section of your HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+const ctx1 = document.getElementById('heatmap').getContext('2d');
+console.log('<%- productPurchaseCounts %>')
+// let productData  = '<%- productPurchaseCounts %>'
+const productData = JSON.parse('<%- JSON.stringify(productPurchaseCounts) %>');
+
+const data = {
+    labels: productData.map(item => item.productName),
+    datasets: [{
+        label: 'Count',
+        data: productData.map(item => item.purchaseCount),
+        borderWidth: 1,
+        backgroundColor: 'rgba(255, 99, 132, 0.7)', // Adjust color as needed
+    }]
+};
+
+// Create the heatmap
+const heatmapChart = new Chart(ctx1, {
+    type: 'bar', // Bar chart can be used to simulate a heatmap
+    data: data,
+    options: {
+        scales: {
+            x: {
+                grid: {
+                    display: false
+                }
+            },
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+    </script>
+
+    <script>
+const orderSourceData = JSON.parse('<%- JSON.stringify(orderSourceData) %>');
+
+// Extract labels and data for the Pie Chart
+const labels = orderSourceData.map(item => item._id);
+const data1 = orderSourceData.map(item => item.count);
+
+// Create a Pie Chart
+const ctx = document.getElementById('orderSourceChart').getContext('2d');
+
+const orderSourceChart = new Chart(ctx, {
+  type: 'pie',
+  data: {
+    labels: labels,
+    datasets: [{
+      data: data1,
+      backgroundColor: ['rgba(255, 99, 132, 0.7)', 'rgba(54, 162, 235, 0.7)', 'rgba(75, 192, 192, 0.7)'],
+      borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(75, 192, 192, 1)'],
+      borderWidth: 1,
+    }],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    title: {
+      display: true,
+      text: 'Percentage of Orders by Source',
+    },
+  },
+});
+
+    </script>
+
+
+
+<script>
+  // Extracted data from your provided array
+  const data2 = JSON.parse('<%- JSON.stringify(userStats) %>');
+
+  // Transform data into Chart.js compatible format
+  const chartData = {
+    labels: data2.map(entry => `${entry._id.month}/${entry._id.day}/${entry._id.year}`),
+    datasets: [{
+      label: 'User Count',
+      data: data2.map(entry => entry.count),
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 2,
+      fill: false
+    }]
+  };
+
+  // Get the canvas element
+  const ctx2 = document.getElementById('myLineChart').getContext('2d');
+
+// Create the line chart
+const myLineChart = new Chart(ctx2, {
+  type: 'line',
+  data: chartData,
+  options: {
+    scales: {
+      xAxes: [{  // Corrected property name
+        type: 'linear',
+        position: 'bottom'
+      }],
+      yAxes: [{
+        ticks: {
+          
+          min: 0 
+        }
+      }]
+    }
+  }
+});
+
+
+</script>
+
+<script>
+    function updateChart() {
+    const selectedInterval = document.getElementById('timeInterval').value;
+    const data3 = JSON.parse('<%- JSON.stringify(salesreport) %>');
+
+    // Destroy existing chart if it exists
+    const existingChart = Chart.getChart('salesOrdersChart');
+    if (existingChart) {
+        existingChart.destroy();
+    }
+
+    // Aggregate data based on selected interval
+    const aggregatedData = {};
+    data3.forEach(entry => {
+        let key;
+        if (selectedInterval === 'monthly') {
+            key = entry._id.date.slice(0, 7); // Extracting year and month
+        } else if (selectedInterval === 'yearly') {
+            key = entry._id.date.slice(0, 4); // Extracting year
+        } else {
+            key = entry._id.date; // Daily
+        }
+
+        if (!aggregatedData[key]) {
+            aggregatedData[key] = 0;
+        }
+        aggregatedData[key] += entry.totalSales;
+    });
+
+    // Extracting labels and total sales from the aggregated data
+    const labels3 = Object.keys(aggregatedData);
+
+    // Sort the dates in chronological order
+    labels3.sort();
+
+    const totalSales = labels3.map(key => aggregatedData[key]);
+
+    // Create a bar chart
+    const ctx3 = document.getElementById('salesOrdersChart').getContext('2d');
+    new Chart(ctx3, {
+        type: 'bar',
+        data: {
+            labels: labels3,
+            datasets: [
+                {
+                    label: 'Total Sales',
+                    data: totalSales,
+                    backgroundColor: 'rgba(75, 192, 192, 0.7)', // Greenish color
+                },
+            ],
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+            },
+        },
+    });
+}
+
+
+    // Initial chart rendering
+    updateChart();
+</script>
+
+
+
+
+<%-include('footer')%>

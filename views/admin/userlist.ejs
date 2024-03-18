@@ -1,0 +1,147 @@
+<%-include('header')%>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"> -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> -->
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+
+<style>
+    #site-main{
+        margin: 0 45px; /* 0 for top and bottom, 10em for left and right */
+        font-family: 'Barlow',sans-serif;
+}
+
+table{
+border-spacing: 0px;
+width: 100%;
+border: 0.5px solid #ddd;
+}
+
+
+.table td,.table th{
+    border: 0.5px solid #8a8a8a;
+padding: .75em;
+vertical-align: top;
+text-align: center;
+
+}
+
+.table tr:hover{
+background-color: #dddddd;
+}
+
+.table .thead-dark th{
+color:#fff;
+background-color: rgb(23, 8, 8);
+border-color: #8a8a8a;
+}
+
+.form-inline {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+.form-user {
+   height: 30px;
+   border-radius: 20px;
+   border: none;
+   background: rgb(235, 235, 235);
+   padding: 0 10px;
+ }
+ 
+ .block-btn,
+    .unblock-btn {
+        text-decoration: none;
+        width: 70px;
+        height: 20px;
+    }
+ .block-btn {
+        background-color: #dc3545; /* Bootstrap danger color for blocked */
+        color: #fff;
+        border: none;
+       
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .block-btn:hover {
+        background-color: #c82333;
+    }
+
+    .unblock-btn {
+        background-color: #28a745; /* Bootstrap success color for active */
+        color: #fff;
+        border: none;
+        
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .unblock-btn:hover {
+        background-color: #218838;
+    }
+
+ </style>
+
+
+<main id="site-main">
+    <div class="container">
+        
+            <!-- <form class="form-inline my-2 my-lg-0">
+                <input class="form-user mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit"><img src="img/" ></button>
+              </form>
+         -->
+
+        
+        <form action="" method="">
+            <table  id="example" class="table table-striped" style="width:100%">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone number</th>
+                        <th>Status</th>
+                        <th>Action</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                    <%users.forEach((user,index)=>{ %>
+                    <tr>
+                        <td><%= index +1%></td>
+                        <td><%= user.firstName + " "+ user.lastName  %></td>
+                        <td><%= user.email%></td>
+                        <td><%= user.phoneNumber%></td>
+                        <td><% if (user.isBlocked){%>
+                               Blocked<% }else{%>
+                               Active<%}%>    
+                        </td>
+                        <td>
+                            <a href="/admin/customers/<%= user._id %>">
+                            <button type="button" class="<%= user.isBlocked ? 'unblock-btn' : 'block-btn' %>" > 
+                               <%= user.isBlocked ? 'Unblock' : 'Block' %>
+                            </button></a>
+                        </td>
+                        
+                    </tr>
+                    <% })%>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</main>
+ <!-- DATATABLE  SCRIPT-->
+ <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+ <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+ <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ 
+ <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>  
+ <script>
+    new DataTable('#example');
+    
+   </script>
+
+<%-include('footer')%>

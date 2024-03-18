@@ -1,0 +1,83 @@
+<%-include('header')%>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+    }
+
+    .card {
+        background-color: #c9c9c9;
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-bottom: 15px;
+        padding: 20px;
+    }
+/* 
+    h2 {
+        color: #333;
+        border-bottom: 2px solid #ccc;
+        padding-bottom: 10px;
+    } */
+
+    .product {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .product img {
+        width: 80px;
+        height: 80px;
+        border-radius: 4px;
+        margin-right: 15px;
+    }
+
+    strong {
+        color: #333;
+    }
+</style>
+
+<div class="container">
+    <div class="card">
+        <h2>User Details</h2>
+        <p><strong>Name:</strong> <%= order.user.firstName %> <%= order.user.lastName %></p>
+        <p><strong>Email:</strong> <%= order.user.email %></p>
+    </div>
+
+    <div class="card">
+        <h2>Order: <%= order._id.toString().slice(0, 8) %></h2>
+        <p><strong>Date:</strong> <%= order.createdAt.toISOString().slice(0, 10) %></p>
+        <p><strong>Total Amount:</strong> ₹<%= order.totalPrice.toFixed(2) %></p>
+        <p><strong>Payment Method:</strong> <%= order.paymentMethod %></p>
+        <p><strong>Shipping Status:</strong> <%= item.status %></p>
+    </div>
+
+    <div class="card">
+        <h2>Product Details</h2>
+        <div class="product">
+            <img src="<%= item.product.productImages[0] %>" alt="<%= item.product.productName %>">
+            <div class="product-info">
+                <p><strong>Name:</strong> <%= item.product.name %></p>
+                <p><strong>Price:</strong> ₹<%= item.unitPrice.toFixed(2) %></p>
+                <p><strong>Quantity:</strong> <%= item.quantity %></p>
+                <p><strong>Category:</strong> <%= item.product.category %></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Shipping Address</h2>
+        <p><strong><%= order.shippingAddress.addresstype %>:</strong></p>
+        <p><%= order.shippingAddress.houseName %>, <%= order.shippingAddress.street %>,</p>
+        <p><%= order.shippingAddress.city %>, <%= order.shippingAddress.state %>,</p>
+        <p><%= order.shippingAddress.country %> - <%= order.shippingAddress.zipCode %></p>
+    </div>
+</div>
+
+<%-include('footer')%>

@@ -1,0 +1,298 @@
+<%-include('header')%>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.min.css'>
+
+<style>
+    body{
+        position: relative;
+    }
+    .addproductcontainer {
+        font-family: 'Arial', sans-serif;
+        max-width: 800px;
+        margin: 1px auto;
+        padding: 20px;
+        background-color: #fff;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input,
+    textarea,
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    button {
+        margin-left: 37% ;
+        margin-top: 50px ;
+        width: 30%;
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    #imagePreview img {
+      height: 50px;
+      max-width: 80px;
+      margin: 5px;
+    }
+
+    #cropper110Modal {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      margin: 20% 18%;
+      background-color: rgba(53, 52, 52, 0.532);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      display: none;
+    }
+
+    #cropper110Modal img {
+      max-width: 100%;
+    }
+
+    .cropper110-page {
+      margin: 1em auto;
+      max-width: 768px;
+      height: 100%;
+    }
+
+    .cropper110-box {
+      padding: 0.5em;
+      width: calc(100% / 2 - 1em);
+      max-height: 60vh;
+    }
+
+    .cropper110-crop,
+    .cropper110-close {
+      padding: .5rem 1rem;
+      background-color: rgb(0, 0, 0);
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .cropper110-close {
+      background-color: red;
+    }
+ 
+</style>
+
+
+<div id="cropper110Modal">
+  <div id="imageCropBox">
+    <div style="text-align: end;">
+      <button class="cropper110-close">close</button>
+    </div>
+    <section class="cropper110-page">
+      <div class="cropper110-box">
+        <div class="cropper110-cropping-box"></div>
+      </div>
+
+      <div>
+        <button class="cropper110-crop mx-3">Crop</button>
+      </div>
+    </section>
+  </div>
+</div>
+<!-- /cropper modal/ -->
+
+
+<div class="addproductcontainer">
+    <h1>Add Product</h1>
+
+    <form id="addProductForm" enctype="multipart/form-data">
+
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName" name="name" required>
+
+        <label for="productModel">Product Model:</label>
+        <input type="text" id="productModel" name="model" required>
+
+        
+        <label for="productDescription">Product Description:</label>
+        <textarea id="productDescription" name="description" required></textarea>
+
+        <label for="productBrand">Product Brand:</label>
+        <input type="text" id="productBrand" name="brand" required>
+
+
+        <label for="productColor">Product Color:</label>
+        <input type="text" id="productColor" name="color" required>
+
+        <label for="productCategory">Product Category:</label>
+        <select id="productCategory" name="category" required>
+            <% categories.forEach(category => { %>
+                <option value="<%= category %>"><%= category%></option>
+            <% }); %>
+        </select>
+
+       
+        <label for="productPrice">Product Price:</label>
+        <input type="number" id="productPrice" name="price" min="0" step="0.01" required>
+
+      
+        
+        <label for="productStock">Product Stock:</label>
+        <input type="number" id="productStock" name="stock" required>
+
+        
+        
+        <!-- <label for="productImages" id="productImagesLabel">Product Images:</label>
+        <input type="file" id="productImages" name="productImages" accept="image/jpeg, image/png" multiple required>
+        <div id="imagePreviewContainer"></div> -->
+
+        <label for="fileUploader" id="productImagesLabel">Product Images:</label>
+            <input type="file" id="fileUploader" name="productImages" data-image-preview="#imagePreview" accept=".jpg,.png,.jpeg" multiple>
+            <div id="imagePreview"></div>
+
+       
+        <button type="submit">Add Product</button>
+    </form>
+</div>
+<!-- cropper modal -->
+
+
+
+
+<script>
+
+
+    document.getElementById('addProductForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+       
+        const formData = new FormData(this);
+        
+
+        console.log('formdata',formData)
+    
+
+        // Send the FormData to the server
+        fetch('/admin/addproduct', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Product added successfully:', data);
+            window.location.href = '/admin/productlist';
+        })
+        .catch(error => {
+            console.error('Error adding product:', error);
+        });
+    });
+</script>
+
+
+
+  <!-- /form/  -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js'></script>
+  <script>
+    let fileInputs = document.querySelectorAll('[data-image-preview]')
+    let croppingBox = document.querySelector('.cropper110-cropping-box')
+    let cropButton = document.querySelector('.cropper110-crop')
+    let closeButton = document.querySelector('.cropper110-close')
+    let cropper = null
+    let currentInput = null
+    let imgNames = null
+
+    fileInputs.forEach(fileInput => {
+      fileInput.addEventListener('change', () => {
+        let previewDiv = document.querySelector(fileInput.dataset.imagePreview)
+        previewDiv.innerHTML = ""
+        for (let each of fileInput.files) {
+          let imgSrc = URL.createObjectURL(each)
+          let img = document.createElement('img')
+          img.src = imgSrc
+          img.dataset.fileName = each.name
+          img.dataset.input = fileInput.id
+          img.addEventListener('click', cropImage)
+          previewDiv.append(img)
+        }
+      })
+    })
+
+    function cropImage(e) {
+      document.getElementById('cropper110Modal').style.display = 'flex'
+      let img = document.createElement('img')
+      img.src = e.target.src
+      img.id = 'image'
+      croppingBox.innerHTML = ''
+      croppingBox.appendChild(img)
+      cropper = new Cropper(img)
+      imgNames = e.target.dataset.fileName
+      currentInput = e.target.dataset.input
+    }
+
+    // Crop and save on click
+    cropButton.addEventListener('click', e => {
+      e.preventDefault()
+      let imgSrc = cropper.getCroppedCanvas({
+        width: 300 // input value
+      }).toDataURL()
+      if (imgSrc && imgNames !== null) {
+        let fileUploader = document.getElementById(currentInput)
+        fetch(imgSrc)
+          .then(res => res.blob())
+          .then(blob => {
+            let file = new File([blob],  `${imgNames}-${Date.now()}.png`, { type: "image/jpeg" })
+            const dt = new DataTransfer()
+            for (let each of fileUploader.files) {
+              if (each.name !== imgNames) {
+                dt.items.add(each)
+              } else {
+                dt.items.add(file)
+              }
+            }
+            fileUploader.files = dt.files
+            let previewDiv = document.querySelector(fileUploader.dataset.imagePreview)
+            previewDiv.innerHTML = ""
+            let res = ""
+            for (let each of fileUploader.files) {
+              let src = URL.createObjectURL(each)
+              res += `<img src="${src}" data-file-name="${each.name}" data-input="${fileUploader.id}" onclick="cropImage(event)" class="previewImages">`
+            }
+            previewDiv.innerHTML = res
+          })
+      }
+      closeButton.click()
+    })
+
+    closeButton.addEventListener('click', () => {
+      document.getElementById('cropper110Modal').style.display = 'none'
+      if (cropper) {
+        cropper.destroy()
+      }
+    })
+  </script>
+
+
+
+<%-include('footer')%>

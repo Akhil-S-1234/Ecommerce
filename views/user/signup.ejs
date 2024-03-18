@@ -1,0 +1,152 @@
+<%-include('header')%>
+
+<div class="create">
+    <form id="signupForm" method="POST" action="/signup">
+        <h2>Create Account</h2>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+        <div id="errorFirstName" style=" font-weight: 20px; color: red;"></div>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+        <div id="errorLastName" style=" font-weight: 20px; color: red;"></div>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <div id="erroremail" style=" font-weight: 20px; color: red;"></div>
+
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" required>
+        <div id="errorPhoneNumber" style="font-weight: 20px; color: red;"></div>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+        <div id="errorMessage" style=" font-weight: 20px; color: red;"></div>
+
+        <button type="button" value="Submit" onclick="validateAndSubmit()">Sign Up</button>
+    </form>
+</div>
+
+<script>
+    function showFieldError(fieldId, errorMessage) {
+        const errorContainer = document.getElementById(`${fieldId}`);
+        if (errorContainer) {
+            errorContainer.textContent = errorMessage;
+            errorContainer.style.display = errorMessage ? 'block' : 'none';
+        }
+    }
+
+    async function validateAndSubmit() {
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phoneNumber = document.getElementById('phoneNumber').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+        // Reset field errors before validation
+        showFieldError('errorFirstName', '');
+        showFieldError('errorLastName', '');
+        showFieldError('erroremail', '');
+        showFieldError('errorPhoneNumber', '');
+        showFieldError('errorMessage', '');
+
+        let isValid = true;
+
+        if (!firstName) {
+            isValid = false;
+            showFieldError('errorFirstName', 'Please enter your First Name.');
+        } else {
+            showFieldError('errorFirstName', '');
+        }
+
+        if (!lastName) {
+            isValid = false;
+            showFieldError('errorLastName', 'Please enter your Last Name.');
+        } else {
+            showFieldError('errorLastName', '');
+        }
+
+        // Validation for Email
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email.match(emailPattern)) {
+            isValid = false;
+            showFieldError('erroremail', 'Please enter a valid Email address.');
+        } else {
+            showFieldError('erroremail', '');
+        }
+
+        // Validation for Phone Number
+        var phonePattern = /^\d{10}$/;
+        if (!phoneNumber.match(phonePattern)) {
+            isValid = false;
+            showFieldError('errorPhoneNumber', 'Please enter a valid 10-digit Phone Number.');
+        } else {
+            showFieldError('errorPhoneNumber', '');
+        }
+
+        // Validation for Password
+        if (password === "") {
+            isValid = false;
+            showFieldError('errorMessage', 'Please enter a Password.');
+        } else {
+            showFieldError('errorMessage', '');
+        }
+
+        // Validation for Confirm Password
+        if (confirmPassword !== password) {
+            isValid = false;
+            showFieldError('errorMessage', 'Passwords do not match.');
+        } else {
+            showFieldError('errorMessage', '');
+        }
+
+        // If all validations pass, proceed with form submission
+        if (isValid) {
+            const formData = new FormData(document.getElementById('signupForm'));
+
+            try {
+                const response = await fetch('/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData)),
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    // Handle server-side validation errors if needed
+                } else {
+                    console.log('User registered successfully');
+                    window.location.href = '/verifyemail';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    }
+
+    // function showError(message, fieldId) {
+    //     const errorMessageContainer = document.getElementById(`error${fieldId}`);
+    //     errorMessageContainer.innerText = message;
+    // }
+
+    // function showValidationMessage(message, containerId) {
+    //     const validationMessageContainer = document.getElementById(containerId);
+    //     validationMessageContainer.innerText = message;
+    // }
+
+    // function resetValidationMessages(containerIds) {
+    //     containerIds.forEach(containerId => {
+    //         const container = document.getElementById(`error${containerId}`);
+    //         container.innerText = '';
+    //     });
+    // }
+</script>
+
+<%-include('footer')%>

@@ -1,0 +1,282 @@
+<%-include('header')%>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-B4pv7f1mkmOmILYXOJxjLO8p4U4bZTGxvb1jfN4MbhMkAbx7+fgBb7XLGMq/XHYBzZi7nb/iw6f2+hFdyjDPwg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+   
+
+    .editproductcontainer {
+        font-family: 'Arial', sans-serif;
+        max-width: 800px;
+        margin: 1px auto;
+        padding: 20px;
+        background-color: #fff;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input,
+    textarea,
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    button {
+        margin-left: 37% ;
+        width: 30%;
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    #preview {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.image-container {
+    position: relative;
+    width: 30%;
+    height: 200px; /* Set a fixed height for better consistency */
+    margin-bottom: 10px;
+    overflow: hidden; /* Hide overflow to ensure consistent height */
+}
+
+#preview img {
+    width: 100%; /* Make the image fill the container width */
+    height: 100%; /* Make the image fill the container height */
+    object-fit: contain; /* Maintain aspect ratio, fit inside the container without distortion */
+    border-radius: 5px;
+}
+
+.delete-button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin-left: 25px;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px solid rgb(0, 0, 0);
+    padding: 5px;
+    cursor: pointer;
+}
+
+
+
+   
+</style>
+
+<div class="editproductcontainer">
+    <h1>Edit Product</h1>
+
+    <form action="/admin/editproduct/<%= prod._id %>" id="editProductForm" method="POST" enctype="multipart/form-data">
+
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName" name="name" value="<%= prod.name %>" required>
+    
+        <label for="productModel">Product Model:</label>
+        <input type="text" id="productModel" name="model" value="<%= prod.model %>" required>
+    
+        <label for="productDescription">Product Description:</label>
+        <textarea id="productDescription" name="description" required><%= prod.description %></textarea>
+    
+        <label for="productCategory">Product Category:</label>
+        <select id="productCategory" name="category" required>
+            <% categories.forEach(category => { %>
+                <option value="<%= category %>" <%= prod.category === category ? 'selected' : '' %>><%= category %></option>
+            <% }); %>
+        </select>
+    
+        <label for="productPrice">Product Price:</label>
+        <input type="number" id="productPrice" name="price" min="0" step="0.01" value="<%= prod.price %>" required>
+    
+        <label for="productBrand">Product Brand:</label>
+        <input type="text" id="productBrand" name="brand" value="<%= prod.brand %>" required>
+        
+        <label for="product">Product Color:</label>
+        <input type="text" id="productColor" name="color" value="<%= prod.color%>" required>
+        
+        <label for="product">Product offerprice:</label>
+        <input type="text" id="productofferprice" name="offerprice" value="<%= prod.offerprice %>" >
+        <div id="errorContainer" style="color: red;"></div>
+        
+       
+        <label for="productStock">Product Stock:</label>
+        <input type="number" id="productStock" name="stock" value="<%= prod.stock %>" required>
+    
+      
+        <label for="productImage">Product Image:</label>
+    <input type="file" id="image" name="productImages" accept="image/*" multiple onchange="previewImages(event)">
+    <div id="preview">
+      <% prod.productImages.forEach((image, index) => { %>
+      <div class="image-container">
+        <img id="zoom-image-<%= prod._id %>" class="card-img-top" src="<%= image %>" />
+        <div class="delete-button" onclick="deleteImage(this, '<%= image %>','<%= prod._id %>')">❌</div>
+      </div>
+      <% }); %>
+    </div>
+    <p id="image-count">Image Count: 6</p>
+  
+
+        <button type="submit">Edit Product</button>
+    </form>
+    
+</div>
+
+<script>
+    document.getElementById('editProductForm').addEventListener('submit', function (event) {
+        event.preventDefault(); 
+
+        const productPriceInput = document.getElementById('productPrice');
+        const productOfferPriceInput = document.getElementById('productofferprice');
+
+        const productPrice = parseFloat(productPriceInput.value);
+        const offerPrice = parseFloat(productOfferPriceInput.value);
+         console.log(productPrice);
+         console.log(offerPrice);
+          
+         errorContainer.textContent = ""
+
+
+        if (offerPrice > productPrice) {
+          const errorMessage = 'Offer price must be less than product price';
+            errorContainer.textContent = errorMessage;
+            return 
+        } 
+   
+
+        const formData = new FormData(this);
+        const formAction = this.getAttribute('action');
+
+        fetch(formAction, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json(); 
+        })
+        .then(data => {
+            console.log('Product edited successfully:', data);
+            window.location.href = '/admin/productlist';
+
+        })
+        .catch(error => {
+            console.error('Error adding product:', error);
+        });
+    });
+
+
+
+    // document.getElementById('productImages').addEventListener('change', function () {
+    //     const fileName = this.value.split('\\').pop();
+    //     document.getElementById('selectedImagePlaceholder').textContent = fileName || 'No file selected';
+    // });
+</script>
+<script>
+    function previewImages(event) {
+      let previewDiv = document.getElementById('preview');
+      previewDiv.innerHTML = "";
+
+      const files = event.target.files;
+
+      for (let i = 0; i < files.length; i++) {
+        const image = URL.createObjectURL(files[i]);
+        const newImage = document.createElement('img');
+        newImage.src = image;
+
+        const imageContainer = document.createElement('div');
+        imageContainer.className = 'image-container';
+        imageContainer.appendChild(newImage);
+
+        previewDiv.appendChild(imageContainer);
+      }
+
+      updateImageCount();
+    }
+
+    function deleteImage(button, imageName,productId) {
+      const imageContainer = button.parentNode;
+      const previewDiv = document.getElementById('preview');
+      previewDiv.removeChild(imageContainer);
+      
+      // Send request to the server to delete the image permanently
+      fetch(`/admin/proImgEdit`, {method:"post",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify({
+      productId:productId,
+      imgName:imageName,
+    })
+  })
+      .then(response => {
+        if (response.ok) {
+          console.log('Image deleted successfully');
+        } else {
+          console.error('Failed to delete image');
+        }
+      })
+      .catch(error => {
+        console.error('Error deleting image:', error);
+      });
+
+      updateImageCount();
+    }
+
+    function updateImageCount() {
+      const previewDiv = document.getElementById('preview');
+      const imageCount = previewDiv.children.length;
+      const countDisplay = document.getElementById('image-count');
+      countDisplay.innerText = `Image Count: ${imageCount}`;
+    }
+
+    function validateForm() {
+      // Get form fields
+      var productName = document.getElementById('productName').value;
+      var price = document.getElementById('price').value;
+      var stock = document.getElementById('stock').value;
+      var rating = document.getElementById('rating').value;
+
+      // Product name validation (no space, starting capital letter)
+
+
+      var productNameRegex = /^[a-zA-Z]+$/;
+      if (!productNameRegex.test(productName).includes('')) {
+        alert('Product name should contain no spaces and only letters.');
+        return false;
+      }
+      // Price, stock, and rating validation (not negative)
+      if (price < 0 || stock < 0 || rating < 0) {
+        alert('Price, stock, and rating cannot be negative.');
+        return false;
+      }
+
+      // If all validations pass, return true to submit the form
+      return true;
+    }
+  </script>
+
+<%-include('footer')%>

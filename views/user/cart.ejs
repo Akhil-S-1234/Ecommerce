@@ -1,0 +1,627 @@
+<%-include('header')%>
+
+<style>
+    
+    
+    .head{
+        margin: 50px 0 50px 50px;
+    }
+
+    .cart-container-wrapper {
+        display: flex;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 20px auto;
+    }
+
+    .cart-container {
+        flex: 1;
+        padding: 20px;
+        background-color: #fff;
+        /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+        /* border-radius: 5px; */
+    }
+
+    .cart-item {
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr 1fr  1fr;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+        padding-bottom: 25px;
+        border-bottom: 2px solid #a4a4a4;
+        font-size: 15px;
+        /* border-radius: 5px; */
+    }
+
+    .cart-item img {
+        max-width: 80px;
+       max-height: 80px;
+        margin-right: 10px;
+    }
+
+    .header-row {
+        display: grid;
+        grid-template-columns: 1fr 3fr  1fr 1fr 1fr;
+        align-items: center;
+        font-size: 13px;
+
+        gap: 10px;
+        margin-bottom: 15px;
+        padding: 10px;
+        border-bottom: 2px solid #a4a4a4;
+        border-top: 2px solid #a4a4a4;
+    }
+
+    .cart-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .checkout-btn {
+        background-color: #00d407;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .checkout-btn:hover {
+        background-color: #01a009;
+    }
+
+    .order-summary {
+        width: 310px;
+        flex: 0 0 300px;
+        margin-left: 90px;
+        margin-top:15px;
+        padding: 20px;
+        background-color: #fff;
+        /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+        /* border-radius: 5px; */
+    }
+    .order-summary a{
+        text-decoration: none;
+    }
+
+    .summary-heading {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .summary-total {
+        display: flex;
+        font-weight: 900;
+
+        justify-content: space-between;
+        margin-top: 30px;
+        border-bottom: 2px solid #a4a4a4;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+    }
+
+    .summary-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        
+    }
+
+    .summary-btn {
+    background-color: #f90404;
+    color: white;
+    width: 100%;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.summary-btn:hover {
+    background-color: #ff2200;
+    text-decoration: none;
+}
+
+
+
+    .total {
+        font-size: 17px;
+        font-weight: 650; /* Increased font weight */
+        color: grey; /* Changed color to grey */
+    }
+    .quantity-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .quantity-adjust-btn {
+        width:25px;
+        height: 25px;
+        background-color: #000000;
+        color: white;
+        /* padding: 5px 10px; Adjust padding for a smaller button */
+        border: none;
+        border-radius: 10px; /* Make the button round */
+        cursor: pointer;
+        margin: 5px;
+    }
+    .quantity{
+        align-items: center;
+    }
+
+    .quantity-adjust-btn:hover {
+        background-color: #707070;
+    }
+   
+
+    .remove-product {
+        border: none;
+        margin-top: 70px;
+        cursor: pointer;
+        color: #565656;
+        text-decoration: underline;
+    }
+
+    .remove-product:hover {
+        font-weight: 850;
+    }
+    .empty-cart {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 300px;
+    }
+
+    .empty-cart img {
+        max-width: 700px;
+        max-height: 700px;
+        margin-left: 250px;
+    }
+
+    
+    .apply-coupon-section {
+        /* width: 300px; */
+        margin-top: 20px;
+        margin-left: 90px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9; /* Light background color */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+    }
+
+    .apply-coupon-section label {
+        margin-right: 10px;
+        font-size: 16px; /* Increased font size */
+    }
+
+    .apply-coupon-section input {
+        width: 190px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 14px; /* Adjusted font size */
+    }
+
+    .apply-coupon-section button {
+        background-color: #00d407;
+        color: white;
+        padding: 10px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px; /* Adjusted font size */
+    }
+
+    .apply-coupon-section button:hover {
+        background-color: #01a009;
+    }
+
+    .modal {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    margin-top: 330px;
+    left: 80%;
+    transform: translateX(-50%);
+    max-width: 400px; /* Adjust the width as needed */
+    padding: 20px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.coupons-container {
+    max-height: 100%;
+}
+
+.coupon-item {
+    cursor: pointer;
+    padding: 10px;
+    background-color: #ffffff;
+    margin-bottom: 10px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.coupon-item:hover {
+    background: #f7e6e6;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+}
+
+.close:hover {
+    color: #000;
+}
+
+#couponMessage {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f2f2f2;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    position: relative; /* Add position: relative */
+}
+
+.close-icon {
+    position: absolute; /* Position the close icon absolutely */
+    top: 5px; /* Adjust the top position */
+    right: 5px; /* Adjust the right position */
+    font-size: 20px;
+    cursor: pointer;
+    color: #888;
+}
+
+.coupon-applied {
+    color: #008000; /* Green color for coupon applied */
+}
+
+.coupon-info {
+    margin-bottom: 10px;
+}
+
+.coupon-label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.coupon-code, .coupon-discount {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+
+
+.close-icon:hover {
+    color: #000; /* Change color on hover if needed */
+}
+
+.outstock {
+        color: #ff0000;
+        background-color: #ffa5a5; /* Red background color, you can adjust this to your preference */
+        padding: 5px;
+        /* border-radius: 5px; */
+        margin-top: 5px;
+        display: inline-block;
+    }
+
+    /* Add a style to dim the cart item when it's out of stock */
+    .cart-item.out-of-stock {
+        opacity: 0.7; /* You can adjust the opacity to your preference */
+    }
+/* 
+.coupon-amount {
+ font-weight: bolder;
+ color: #132413;
+}  */
+
+
+</style>
+
+
+<div class="head"><h1>Shopping Cart</h1></div>
+
+
+<div class="cart-container-wrapper">
+
+    <% if (cart == null) { %>
+        <div class="empty-cart">
+            <img src="img/empty-cart.png" alt="Empty Cart Image">
+        </div>
+    <% } else { %>
+
+    <div class="cart-container" id="cart-container">
+        <div class="header-row">
+            <div>Product</div>
+            <div></div>
+            
+            <div>Unit Price</div>
+            <div>Quantity</div>
+            <div>Total Price</div>
+        </div>
+
+        <!-- Cart items with demo data -->
+        <% cart.items.forEach(item => { %>
+            <div class="cart-item" data-product-id="<%= item.product._id %>">
+                <img src="<%= item.product.productImages[0] %>" alt="<%= item.product.name %>">
+                <div>
+                <div><%= item.product.name %></div>
+                <!-- Inside the cart-item loop -->
+                <form action="/cart/<%= item.product._id %>" method="get">
+                <button type="button" class="remove-product" onclick="confirmCartItemRemoval('<%= item.product._id %>')">Remove</button>
+                <!-- <div class="outstock"></div> -->
+
+                </form>
+
+                </div>
+                <div>₹<%= item.product.price.toFixed(2) %></div> <!-- Access product price through item.product -->
+                <div class="quantity-container">
+                    <button class="quantity-adjust-btn decrease" onclick="adjustCartItemQuantity('<%= item.product._id %>','<%= item.quantity %>','<%= item.product.price%>' ,'decrease')">-</button>
+                    <div class="quantity"><%= item.quantity %></div>
+                    <button class="quantity-adjust-btn increase" onclick="adjustCartItemQuantity('<%= item.product._id %>', '<%= item.quantity %>','<%= item.product.price%>','increase')">+</button>
+                </div>                   
+                <div class="total">₹<%= item.total.toFixed(2) %></div>
+            </div>
+        <% }); %>
+
+    </div>
+    <div>
+        <input type="hidden" id="selectedCouponCode">
+        <div id="couponModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div class="coupons-container">
+        <% coupons.forEach(coupon => { %>
+            <div class="coupon-item" onclick="insertCouponCode('<%= coupon.code %>')">
+                <p><strong><%= coupon.code %></strong>: Use this code to have discount of <%= coupon.discount %>% Off</p>
+            </div>
+        <% }); %>
+    </div>
+</div>
+
+        
+        
+        
+        <div class="apply-coupon-section">
+            <% if ( !cart.couponused  ||  cart.couponused.discount_amount == 0) { %>
+                <label for="couponCode">Apply Coupon Code:</label><br>
+                <input type="text" id="couponCode" placeholder="Click here to see available coupons" onclick="openModal()"> 
+                <button type="button" onclick="applyCoupon()">Apply Coupon</button>
+            <% } else { %>
+
+                <div id="couponMessage" class="coupon-applied">
+                    <span class="close-icon" onclick="closeCouponMessage()">×</span>
+                    <div class="coupon-info">
+                        <p class="coupon-label">Coupon applied</p>
+                        <p class="coupon-code">Coupon Code: <%= cart.couponused.couponid.code %> <%= cart.couponused.couponid.amount %>()</p>
+                        <p class="coupon-discount">Discount: ₹ <%= cart.couponused.discount_amount %></p>
+                    </div>
+                    <!-- <span id="couponAmount" class="coupon-amount"></span> -->
+                </div>
+                
+                
+                
+                
+                <% } %>
+    
+
+        </div>
+
+     
+    <div class="order-summary">
+
+        <div class="summary-heading">Order Summary</div>
+        <div class="summary-item">
+            <span>Item Subtotal:</span>
+            <span>₹<%= itemsubtotal.toFixed(2) %></span>
+        </div>
+        <div class="summary-item">
+            <span>Shipping Total:</span>
+            <span>Free</span>
+        </div>
+        <% if (cart.couponused.discount_amount > 0) { %>
+        <div class="summary-item">
+            <span>Coupon Discount:</span>
+            <span id="couponAmount">₹<%= cart.couponused.discount_amount.toFixed(2) %></span>
+        </div>
+        <% } %>
+
+        <div class="summary-total">
+            <span>Total:</span>
+            <span>₹<%= cart.totalPrice.toFixed(2) %></span>
+        </div>
+        <a href="/checkout">
+        <div class="summary-actions">
+            <button class="summary-btn">Checkout</button>
+        </div>
+    </a>
+    </div>
+</div>
+    <% } %>
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+
+<script>
+    function openModal() {
+        var modal = document.getElementById("couponModal");
+        modal.style.display = "block";
+    }
+
+    function closeModal() {
+        var modal = document.getElementById("couponModal");
+        modal.style.display = "none";
+    }
+
+    function insertCouponCode(code) {
+        document.getElementById('selectedCouponCode').value = code;
+        var couponInput = document.getElementById("couponCode");
+        couponInput.value = code;
+        closeModal(); // Close the modal after inserting the code
+    }
+    
+    function closeCouponMessage(){
+        fetch(`/removecoupon`)
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response data as needed
+                    console.log(data);
+                    window.location.reload()
+
+                })
+                .catch(error => {
+                    // Handle any errors that occurred during the fetch
+                    console.error('Error applying coupon:', error);
+                });
+    }
+    // Your applyCoupon() function implementation goes here
+    function applyCoupon() {
+        const couponCode = document.getElementById('selectedCouponCode').value;
+         
+
+        if (couponCode) {
+            // Your fetch logic here
+            fetch(`/applycoupon/${couponCode}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response data as needed
+                    console.log(data);
+                    window.location.reload()
+
+                })
+                .catch(error => {
+                    // Handle any errors that occurred during the fetch
+                    console.error('Error applying coupon:', error);
+                });
+        } else {
+            // Handle the case when no coupon code is selected
+            console.warn('No coupon code selected');
+        }
+
+    }
+</script>
+
+
+<script>
+function adjustCartItemQuantity(productId, quantitys, price,action) {
+    const quantityElement = document.querySelector(`.cart-item[data-product-id="${productId}"] .quantity`);
+
+    // Now you can retrieve the quantity value
+    const currentQuantity = parseInt(quantityElement.textContent, 10);
+
+    if ((currentQuantity === 1 && action === 'decrease')) {
+        // If quantity is already at the limit and further adjustment is requested, do nothing
+        return;
+    }
+
+     if(action=='increase'){
+        quantitys=1
+     }
+     else{
+        quantitys= -1
+     }
+    
+
+    // quantity.textContent = quantity;
+    updateCartItem(productId,quantitys, price);
+}
+
+
+
+    function updateCartItem(productId, quantity, productPrice) {
+    // Send an HTTP request to your server to update the quantity in the database
+    fetch('/cart/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            productId: productId,
+            quantity: quantity,
+            productPrice: productPrice, // Include product price in the request body
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+            if (data.success) {
+                // Update the cart UI dynamically based on the server response
+                const cartItem = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
+                const quantityElement = cartItem.querySelector('.quantity');
+                const totalElement = cartItem.querySelector('.total');
+                const summarySubtotalElement = document.querySelector('.summary-item span:last-child');
+                const summaryTotalElement = document.querySelector('.summary-total span:last-child');
+                const couponDiscountElement = document.querySelector('.coupon-discount');
+
+                const couponAmountElement = document.getElementById('couponAmount');
+
+    // Update the content of the element
+            //    couponAmountElement.textContent = `₹${data.discount_amount.toFixed(2)}`;
+                // Update quantity and total price in the cart item
+                quantityElement.textContent = data.quantity;
+                totalElement.textContent = `₹${data.totalProductPrice.toFixed(2)}`;
+                // couponDiscountElement.textContent = `Discount: ₹${data.discount_amount.toFixed(2)}`;
+                // Update subtotal and total price in the order summary
+                summarySubtotalElement.textContent = `₹${data.itemsubtotal.toFixed(2)}`;
+                summaryTotalElement.textContent = `₹${data.cartTotalPrice.toFixed(2)}`;
+        } else {
+            
+            console.error('Out of stock',data.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Out of Stock',
+                text: data.message, // You can customize the message here
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error updating cart item quantity:', error);
+    });
+}
+
+
+function confirmCartItemRemoval(productId) {
+        // Use SweetAlert for a more visually appealing confirmation
+        console.log(productId)
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, remove it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user confirms, submit the form for removing the item
+                const form = document.querySelector(`form[action="/cart/${productId}"]`);
+                form.submit();
+            }
+        });
+    }
+
+</script>
+
+<%-include('footer')%>

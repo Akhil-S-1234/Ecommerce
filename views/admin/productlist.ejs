@@ -1,0 +1,269 @@
+<%-include('header')%>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+
+
+<style>
+    #site-main{
+        margin: 0 40px; /* 0 for top and bottom, 10em for left and right */
+        font-family: 'Barlow',sans-serif;
+}
+
+table{
+border-spacing: 0px;
+width: 100%;
+border: 0.5px solid #ddd;
+}
+
+
+.table td,.table th{
+    border: 0.5px solid #8a8a8a;
+padding: .75em;
+vertical-align: top;
+text-align: center;
+
+}
+
+.table tr:hover{
+background-color: #dddddd;
+}
+
+.table .thead-dark th{
+color:#fff;
+background-color: rgb(23, 8, 8);
+border-color: #8a8a8a;
+}
+
+.form-inline {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+.form-user {
+   height: 30px;
+   border-radius: 20px;
+   border: none;
+   background: rgb(235, 235, 235);
+   padding: 0 10px;
+ }
+ 
+ .block-btn,
+    .unblock-btn {
+        text-decoration: none;
+        width: 70px;
+        height: 20px;
+    }
+ .block-btn {
+        background-color: #dc3545; /* Bootstrap danger color for blocked */
+        color: #fff;
+        border: none;
+       
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .block-btn:hover {
+        background-color: #c82333;
+    }
+
+    .unblock-btn {
+        background-color: #28a745; /* Bootstrap success color for active */
+        color: #fff;
+        border: none;
+        
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .unblock-btn:hover {
+        background-color: #218838;
+    }
+
+    button {
+            margin-left: 90%;
+            margin-bottom: 8px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 7px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+     button:hover {
+           background-color: #45a049;
+     }
+     .stock-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.stock-btn:hover {
+    background-color: #45a049;
+}
+.status-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.status-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 80px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.status-dropdown-content span {
+  color: black;
+  padding: 12px 16px;
+  display: block;
+  cursor: pointer;
+}
+
+.status-dropdown-content span:hover {
+  background-color: #ddd;
+}
+
+.status-dropdown:hover .status-dropdown-content {
+  display: block;
+}
+
+     /* .text-gradient{
+            cursor: pointer;
+            padding-left: 5px;
+            background: linear-gradient(to right,#5d2de2,#4a00e0);
+           -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+     } */
+ </style>
+
+
+<main id="site-main">
+    <div class="container">
+        
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-user mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <!-- <button class="btn btn-outline-light my-2 my-sm-0" type="submit"><img src="img/" ></button> -->
+              </form>
+             
+             <a href="/admin/addproduct"> <button id="addBtn">Add Product</button></a>
+
+        <!-- form handling -->
+        <form action="" method="">
+            <table  id="example" class="table table-striped" style="width:100%">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Model</th>
+                        <th>Category</th>
+                        <th>Brand</th>
+                        <th>Color</th>
+                        <th>Price</th>
+                        <th>Stock</th>  
+                        <th>Status</th>  
+                        <th>Action</th>    
+                    </tr>
+                </thead>
+                <tbody>
+                    <%products.forEach((product,index)=>{ %>
+                    <tr>
+                        <td><%= index+1%></td>
+                        <td><%= product.name%></td>
+                        <td><img src="<%= product.productImages[0]%> " style="width: 60px; height: 60px;"> </td>
+                        <td><%= product.model%></td>
+                        <td><%= product.category%></td>
+                        <td><%= product.brand %></td>
+                        <td><%= product.color%></td>
+                        <td><%= product.price%></td>
+                        <td>
+                            <!-- <button class="stock-btn" onclick="updateStock('', 'increment')">+</button> -->
+                                  <%= product.stock %>
+                            <!-- <button class="stock-btn" onclick="updateStock('', 'decrement')">-</button> -->
+                        </td>  
+                        <td>
+                            <div class="status-dropdown">
+                              <span id="status-label-<%= index+1 %>" onclick="openStatusDropdown('<%= index +1 %>')">
+                                <%= product.isListed ? 'Listed' : 'Unlisted' %>
+                              </span>
+                              <div id="statusDropdown<%= index +1 %>" class="status-dropdown-content">
+                                <span onclick="setStatus('<%= index +1 %>', true,'<%= product._id %>')">Listed</span>
+                                <span onclick="setStatus('<%= index +1 %>', false,'<%= product._id %>')">Unlisted</span>
+                              </div>
+                            </div>
+                          </td>
+
+                        <td>
+                            <a href="/admin/editproduct/<%= product.id%>" style="text-decoration: none;" >
+                                <span class="text-gradient"><i class="fas fa-pencil-alt">✏️</i></span>
+                            </a>
+                            <a href="/admin/productlist/<%= product.id%>">
+                                <!-- <span class="text-gradient"><i class="fa-solid fa-trash">🗑️</i></span> -->
+                            </a>
+                        </td>
+                    </tr>
+                    <% })%>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</main>
+
+<!-- DATATABLE  SCRIPT-->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>  
+<script>
+   new DataTable('#example');
+   
+  </script>
+
+<script>
+    function openStatusDropdown(index) {
+  document.getElementById('statusDropdown' + index).style.display = 'block';
+}
+
+function setStatus(index, isListed,id) {
+
+  fetch(`/admin/productstatus/${id}`, {
+    method: 'POST',
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      console.log('Product status updated successfully');
+      const labelElement = document.getElementById('status-label-' + index);
+      labelElement.textContent = isListed ? 'Listed' : 'UnListed';
+      closeStatusDropdown(index);
+      // You can add further logic here if needed
+    } else {
+      console.error('Failed to update product status:', data.error);
+      // Handle the error accordingly
+    }
+  })
+  .catch(error => {
+    console.error('Error updating product status:', error);
+    // Handle the error accordingly
+  });
+}
+
+function closeStatusDropdown(index) {
+  document.getElementById('statusDropdown' + index).style.display = 'none';
+}
+
+</script>
+
+
+<%-include('footer')%>

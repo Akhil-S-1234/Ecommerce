@@ -1,0 +1,1559 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+
+
+<title>account settings - Bootdey.com</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"> -->
+
+<%-include('header')%>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+<style type="text/css">
+
+
+.btn-default {
+    border-color: rgba(24,28,33,0.1);
+    background: rgba(0,0,0,0);
+    color: #4E5155;
+}
+
+label.btn {
+    margin-bottom: 0;
+}
+
+.btn-outline-primary {
+    border-color: #26B4FF;
+    background: transparent;
+    color: #26B4FF;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+.text-light {
+    color: #babbbc !important;
+}
+
+.btn-facebook {
+    border-color: rgba(0,0,0,0);
+    background: #3B5998;
+    color: #fff;
+}
+
+.btn-instagram {
+    border-color: rgba(0,0,0,0);
+    background: #000;
+    color: #fff;
+}
+
+.card {
+    background-clip: padding-box;
+    box-shadow: 0 1px 4px rgba(24,28,33,0.012);
+}
+
+.row-bordered {
+    overflow: hidden;
+}
+
+.account-settings-fileinput {
+    position: absolute;
+    visibility: hidden;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+.account-settings-links .list-group-item.active {
+    font-weight: bold !important;
+}
+html:not(.dark-style) .account-settings-links .list-group-item.active {
+    background: transparent !important;
+}
+.account-settings-multiselect ~ .select2-container {
+    width: 100% !important;
+}
+.light-style .account-settings-links .list-group-item {
+    padding: 0.85rem 1.5rem;
+    border-color: rgba(24, 28, 33, 0.03) !important;
+}
+.light-style .account-settings-links .list-group-item.active {
+    color: #4e5155 !important;
+}
+.material-style .account-settings-links .list-group-item {
+    padding: 0.85rem 1.5rem;
+    border-color: rgba(24, 28, 33, 0.03) !important;
+}
+.material-style .account-settings-links .list-group-item.active {
+    color: #4e5155 !important;
+}
+.dark-style .account-settings-links .list-group-item {
+    padding: 0.85rem 1.5rem;
+    border-color: rgba(255, 255, 255, 0.03) !important;
+}
+.dark-style .account-settings-links .list-group-item.active {
+    color: #fff !important;
+}
+.light-style .account-settings-links .list-group-item.active {
+    color: #4E5155 !important;
+}
+.light-style .account-settings-links .list-group-item {
+    padding: 0.85rem 1.5rem;
+    border-color: rgba(24,28,33,0.03) !important;
+}
+
+.form-check-inline {
+            margin-right: 15px; /* Adjust the spacing between radio buttons */
+        }
+
+        .form-check-input {
+            width: 15px !important; /* Adjust the width of the radio buttons */
+            height: 15px; /* Adjust the height of the radio buttons */
+        }
+        .notification {
+        position: fixed;
+        top: 80px; /* Adjust the top value as needed */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 15%;
+        height: 47px;
+        background-color: #28a745;
+        color: #fff;
+        padding: 11px;
+        border-radius: 5px;
+        display: none;
+        animation: fadeOut 3s ease-in-out; 
+        z-index: 9999;
+    }
+
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+    #address-container {
+    border: 1px solid #ccc;
+    margin-top: 25px; 
+    padding-top: 12px !important;
+    padding-left: 9px;
+    padding-bottom: 12px ;
+}
+
+/* Card Styles */
+.card-bod {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px;
+}
+
+/* Order Styles */
+.order-item {
+    /* border-bottom: 1px solid #ddd; */
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+}
+
+h3 {
+    color: #007bff;
+}
+
+/* Product Details Styles */
+.product-details {
+    display: flex;
+    flex-direction: column; /* Display products vertically */
+}
+
+.product {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center; /* Align items horizontally */
+}
+
+.product img {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.product-info {
+    text-align: left;
+    display: flex;
+    align-items: center; /* Align product info horizontally */
+    justify-content: space-between; /* Add space between elements */
+    width: 100%; /* Ensure product info takes full width */
+}
+
+.product-info p {
+    margin: 5px 0;
+}
+
+.cancel-button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cancel-button:hover {
+    background-color: #c82333;
+}
+.return-button{
+    background-color: #1057ee;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.return-button:hover{
+    background-color: #0b3faf;
+}
+
+
+.wallet-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .balance-container,
+        .add-money-container {
+            margin-bottom: 20px;
+            background-color: #e0e0e0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .wallet-container h2, h3 {
+            color: #333;
+        }
+
+        .balance {
+            font-weight: bolder;
+            font-size: larger;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .add-money {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .add-money-input-container {
+            position: relative;
+            margin-left: 27%;
+            margin-top: 20px;
+        }
+
+        .add-money-input {
+            width: 60%;
+    height: 50px;
+    padding: 17px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding-left: 30px;
+    padding-top: 49px;
+    text-align: left;
+    font-weight: bolder;
+    font-size: 16px;/* Adjust the size as needed */
+        }
+
+
+        .rupee-sign {
+            position: absolute;
+            top: 63%;
+            left: 12px;
+            transform: translateY(-50%);
+            color: #333;
+            font-weight: bolder;
+            font-size: 20px; /* Adjust the size as needed */
+        }
+
+        .enter-amount{
+            position: absolute;
+            top: 20%;
+            left: 12px;
+            transform: translateY(-50%);
+            color: #333;
+            font-weight: lighter;
+            font-size: 15px;
+        }
+
+        .add-money-btn {
+            background-color: #ff4444;
+            color: #fff;
+            padding: 8px;
+            width: 25%;
+            margin-left:  37%;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bolder;
+            
+        }
+        .custom-swal-container {
+          margin-top: 80px;
+          background-color: #28a745;
+        }
+        .add-money-info{
+          font-weight: lighter;
+          padding-left: 30%;
+        }
+
+/* Style for the all-transactions-container */
+.all-transactions-container {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    margin-top: 20px;
+}
+
+/* Style for the transaction table */
+.transaction-table {
+    margin: 40px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for transaction details */
+.transactions h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Style for transaction rows */
+.transaction-row {
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #333;
+}
+
+/* Style for transaction description */
+.transaction-row .description-wallet {
+    color: #666 !important;
+    margin-left: 10px;
+}
+
+/* Style for transaction amount */
+.amount {
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+/* Style for positive and negative amounts */
+.amount.positive {
+    color: rgb(40, 222, 40);
+}
+
+.amount.negative {
+    color: red;
+}
+
+/* Optional: Add some hover effect for better user experience */
+.transaction-row:hover {
+    background-color: #f5f5f5;
+    transition: background-color 0.3s;
+}
+
+/* Style for the centered "View All Transactions" link */
+.view-all-option {
+    margin-top: 20px;
+    text-align: center; /* Center the link */
+}
+
+.view-all-option a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: transparent; /* Transparent background */
+    color: #3498db !important; /* Adjust the text color */
+    text-decoration: underline; /* Underline the text */
+    transition: color 0.3s;
+}
+
+.view-all-option a:hover {
+    color: #2980b9 !important; /* Adjust the hover text color */
+}
+
+.pagination-container {
+    margin: 25px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pagination-container a {
+    margin-right: 5px;
+    padding: 5px 8px;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    color: #333;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.pagination-container a:hover {
+    background-color: #f5f5f5;
+}
+
+.invoice-download {
+        text-align: right;
+        margin-top: 10px; /* Adjust margin as needed */
+    } 
+    .invoice-download a {
+        text-decoration: none;
+    }
+
+    .download-button {
+        padding: 10px;
+        background-color: #3498db; /* You can change the color as needed */
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+
+    }
+    .ordertable {
+        margin: 20px 50px; /* 0 for top and bottom, 10em for left and right */
+        font-family: 'Barlow', sans-serif;
+    }
+
+    table {
+        border-spacing: 0px;
+        width: 100%;
+        border: 0.5px solid #ddd;
+    }
+
+    .table td,
+    .table th {
+        border: 0.5px solid #8a8a8a;
+        margin: .5em;
+        text-align: center;
+    }
+
+    .table tr:hover {
+        background-color: #dddddd;
+    }
+
+    .table .thead-dark th {
+        color: #fff;
+        background-color: rgb(23, 8, 8);
+        border-color: #8a8a8a;
+    }
+
+    .form-inline {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .form-user {
+        height: 30px;
+        border-radius: 20px;
+        border: none;
+        background: rgb(235, 235, 235);
+        padding: 0 10px;
+    }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination a {
+        color: black;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+    }
+
+    .pagination a.active {
+        background-color: #4CAF50;
+        color: white;
+        border-radius: 50%;
+    }
+
+    .pagination a:hover:not(.active) {
+        background-color: #ddd;
+    }
+    
+
+    </style>
+<!-- </head>
+<body>
+
+    <nav class="navbar navbar-light bg-light">
+        <div class="navbar-brand">
+            <img src="/img/logo-black.png"  style="width: 50px; height:auto ;" alt="Your Icon" width="30" height="30" class="d-inline-block align-top">
+        </div>
+    </nav> -->
+
+    <div class="container light-style flex-grow-1 container-p-y">
+        <h4 class="font-weight-bold py-3 mb-4">
+            My Profile
+        </h4>
+        <div id="notification-container" class="notification " style="display: none;"></div>
+
+       
+        <div class="card overflow-hidden">
+
+            <div class="row no-gutters row-bordered row-border-light">
+                <div class="col-md-3 pt-0">
+                    <div class="list-group list-group-flush account-settings-links">
+                        <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">General</a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">Change password</a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info">Manage Addresses</a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-social-links">My Orders</a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-connections">My Wallet</a>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="account-general">
+                            
+                            <hr class="border-light m-0">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="form-label">First name</label>
+                                    <input type="text" id="firstName" class="form-control mb-1" value="<%= User.firstName%>">
+                                    <span id="firstName-error" class="error-message text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Last name</label>
+                                    <input type="text" id="lastName" class="form-control" value="<%= User.lastName%>">
+                                    <span id="lastName-error" class="error-message text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">E-mail</label>
+                                    <input type="text" class="form-control mb-1" value="<%= User.email%>" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control" value="<%= User.phoneNumber%>" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Gender</label><br>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="male" value="male" <%= User.gender === 'male' ? 'checked' : '' %>>
+                                        <p class="form-check-label" for="male">Male</p>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="female" value="female" <%= User.gender === 'female' ? 'checked' : '' %>>
+                                        <p class="form-check-label" for="female">Female</p>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="other" value="other" <%= User.gender === 'other' ? 'checked' : '' %>>
+                                        <p class="form-check-label" for="other">Other</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center"> 
+                                    <button type="button" onclick="updateProfile()" class="btn btn-danger">Update</button>&nbsp;
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="tab-pane fade" id="account-change-password">
+                            <div class="card-body pb-2">
+                                <div class="form-group">
+                                    <label class="form-label">Current password</label>
+                                    <input type="password" id="currentPassword" class="form-control">
+                                    <span id="currentPassword-error" class="error-message text-danger"></span>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">New password</label>
+                                    <input type="password" id="newPassword" class="form-control">
+                                    <span id="newPassword-error" class="error-message text-danger"></span>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Repeat new password</label>
+                                    <input type="password" id="repeatNewPassword" class="form-control">
+                                    <span id="repeatNewPassword-error" class="error-message text-danger"></span>
+
+                                </div>
+                                <div class="d-flex justify-content-center"> 
+                                    <button type="button" onclick="updatepassword()" class="btn btn-danger">Update</button>&nbsp;
+                                </div>
+                            </div>
+                        </div>
+                        
+                                             <!-- Add this modal outside your main content -->
+  <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editAddressModalLabel">Edit Address</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Populate the modal fields with the current address details -->
+                <label for="editAddressType">Address Type</label>
+                <select id="editAddressType" class="form-control" required>
+                    <option value="Home">Home</option>
+                    <option value="Work">Work</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="editHouseName">House Name</label>
+                <input type="text" id="editHouseName" class="form-control" value="" required>
+
+                <label for="editStreet">Street</label>
+                <input type="text" id="editStreet" class="form-control" value="" required>
+
+                <label for="editCity">City</label>
+                <input type="text" id="editCity" class="form-control" value="" required>
+
+                <label for="editState">State</label>
+                <input type="text" id="editState" class="form-control" value="" required>
+
+                <label for="editCountry">Country</label>
+                <input type="text" id="editCountry" class="form-control" value="" required>
+
+                <label for="editZipCode">Zip Code</label>
+                <input type="text" id="editZipCode" class="form-control" value="" required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveChangesBtn" >Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+                                            <!-- Add this modal outside your main content -->
+                                            <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="editAddressModalLabel">Add Address</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <!-- Populate the modal fields with the current address details -->
+                                                            <label for="addAddressType">Address Type</label>
+                                                            <select id="addAddressType" class="form-control" required>
+                                                                <option value="Home">Home</option>
+                                                                <option value="Work">Work</option>
+                                                                <option value="Other">Other</option>
+                                                            </select>
+                                            
+                                                            <label for="addHouseName">House Name</label>
+                                                            <input type="text" id="addHouseName" class="form-control" value="" required>
+                                            
+                                                            <label for="addStreet">Street</label>
+                                                            <input type="text" id="addStreet" class="form-control" value="" required>
+                                            
+                                                            <label for="addCity">City</label>
+                                                            <input type="text" id="addCity" class="form-control" value="" required>
+                                            
+                                                            <label for="addState">State</label>
+                                                            <input type="text" id="addState" class="form-control" value="" required>
+                                            
+                                                            <label for="addCountry">Country</label>
+                                                            <input type="text" id="addCountry" class="form-control" value="" required>
+                                            
+                                                            <label for="addZipCode">Zip Code</label>
+                                                            <input type="text" id="addZipCode" class="form-control" value="" required>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-primary" onclick="addaddress()" >Save Changes</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+<!-- Your main content -->
+<div class="tab-pane fade" id="account-info">
+    <div class="card-body">
+        <h6 class="font-weight-bold" style="font-size: 18px;">Addresses</h6>
+        <% User.addresses.forEach(address => { %>
+            <div id="address-container" style="display: flex; justify-content: space-between; align-items: center;">
+                <p style="margin: 0;">
+                    <strong><%= address.addresstype %></strong> :
+                    <%= address.houseName %>, <%= address.street %>, <%= address.city %>,
+                    <%= address.state %>, <%= address.country %> - <%= address.zipCode %>
+                </p>
+                <div style="display: flex; ">
+                    <!-- Add data-toggle and data-target attributes to trigger the modal -->
+                    <span class="custom-icon p-3" data-toggle="modal" data-target="#editAddressModal" onclick="editAddress('<%= JSON.stringify(address) %>')">✏️</span>
+                    <span class="custom-icon p-3" onclick="confirmDelete('<%= address._id %>')">🗑️</span>
+
+                </div>
+            </div>
+        <% }); %>
+        <button class="btn btn-primary mt-4 mx-auto d-block" data-toggle="modal" data-target="#addAddressModal">Add New Address</button>
+
+    </div>
+</div>
+
+
+                        
+                        
+
+<div class="tab-pane fade" id="account-social-links">
+    <div class="ordertable">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Order Date</th>
+                    <th>Total Items</th>
+                    <th>Total Amount</th>
+                    <th>Payment Method</th>
+                    <th>Payment Status</th>
+                    <th>View Orders</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% orders.forEach(order => { %>
+                    <tr>
+                        <td><%= order._id.toString().slice(0, 8) %></td>
+                        <td><%= order.createdAt.toLocaleDateString() %></td>
+                        <td><%= order.items.length %></td>
+                        <td>₹<%= order.totalPrice.toFixed(2) %></td>
+                        <td><%= order.paymentMethod %></td>
+                        <td><%  if(order.paymentstatus=='confirmed'){ %>
+                                   Confirmed
+                            <% } else { %>
+                                <p style="color: red;"> Failed </p>
+                            <% } %></td>
+                        <td>
+                            <%  if(order.paymentstatus=='confirmed'){ %>
+                            <a href="/orderdetail/<%= order._id %>">View Orders</a>
+                            <% } else { %>
+                                <a style="text-decoration: none;color: #ffffff; background-color: #d52d2d; cursor: pointer; " onclick="failedpay('<%= order.totalPrice %>','<%= order._id %>')">Continue Payment >></a>
+                            <% } %>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+        <!-- Pagination Controls -->
+        <div class="pagination">
+            <% if (currentPage > 1) { %>
+                <a href="?page=<%= currentPage - 1 %>">&laquo; Previous</a>
+            <% } %>
+
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <a href="?page=<%= i %>" class= '<%= i === currentPage ? "active" : "" %>'><%= i %></a>
+            <% } %>
+
+            <% if (currentPage < totalPages) { %>
+                <a href="?page=<%= currentPage + 1 %>">Next &raquo;</a>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+
+      
+             <div class="tab-pane fade" id="account-connections">
+                <div class="wallet-container" id="walletContainer">
+                    <div class="balance-container">
+                        <h2>Balance</h2>
+                        <div class="balance">
+                            <p> ₹ <%= User.wallet.balance %></p>
+                        </div>
+                    </div>
+                    <div class="add-money-container">
+                        <h3 class="add-money">Add Money </h3>
+                        <div class="add-money-input-container">
+                            <input type="text-bolder" id="addmoney" class="add-money-input" placeholder="">
+                            <div class="enter-amount">Enter Amount</div>
+                            <div class="rupee-sign">&#x20B9;</div>
+                        </div>
+                        <p class="add-money-info">&#9432; You can add up to ₹10,000</p>
+                        <div id="error-container" class="error-container" style="margin: 25px; color: red; text-align: center;"></div>
+                        <button class="add-money-btn" onclick="initializeRazorpay()">Add Money</button>
+                    </div>
+                    <div class="transactions">
+                        <h3>Recent Transactions</h3>
+                        <div class="transaction-table" id="recentTransactionTable">
+                            <% 
+                            const transactions = User.wallet.transactions.reverse();
+                            const showAllOptionAfter = 3; // Change this number based on your requirement
+                    
+                            for (let index = 0; index < transactions.length; index++) { 
+                                const transaction = transactions[index];
+                                %>
+                                <div class="transaction-row">
+                                    <span class="date"><%= transaction.date.toLocaleDateString() %></span>
+                                    <span class="description-wallet"><%= transaction.description %></span>
+                                    <% if (transaction.amount >= 0) { %>
+                                        <span class="amount positive">+₹<%= transaction.amount.toFixed(2) %></span>
+                                    <% } else { %>
+                                        <span class="amount negative">-₹<%= Math.abs(transaction.amount).toFixed(2) %></span>
+                                    <% } %>
+                                </div>
+                                <% 
+                                if (index === showAllOptionAfter - 1) { 
+                                    %>
+                                    <div class="view-all-option">
+                                        <a onclick="showAllTransactions()">View All Transactions >></a>
+                                    </div>
+                                    <% 
+                                    break; // This will exit the for loop
+                                }
+                            }
+                            %>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                    
+                    
+                </div>
+                        </div>
+
+
+                        <div class="all-transactions-container" id="allTransactionsContainer" >
+                            <div class="transactions">
+                                <h3>Recent Transactions</h3>
+                                <div class="transaction-table" id="transactionTable">
+                                    <% User.wallet.transactions.forEach((transaction, index) => { %>
+                                        <div class="transaction-row">
+                                            <span class="date"><%= transaction.date.toLocaleDateString() %></span>
+                                            <span class="description-wallet"><%= transaction.description %></span>
+                                            <% if (transaction.amount >= 0) { %>
+                                                <span class="amount positive">+₹<%= transaction.amount.toFixed(2) %></span>
+                                            <% } else { %>
+                                                <span class="amount negative">-₹<%= Math.abs(transaction.amount).toFixed(2) %></span>
+                                            <% } %>
+                                        </div>
+                                    <% }); %>
+                                </div>
+                                <div class="pagination-container" id="paginationContainer"></div>
+                            </div>
+                        </div>
+
+
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="text-right mt-3">
+            <button type="button" class="btn btn-primary">Save changes</button>&nbsp;
+            <button type="button" class="btn btn-default">Cancel</button>
+        </div> -->
+
+        <!-- Include your scripts here -->
+        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+       
+
+         <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const transactionsPerPage = 8; // Adjust the number of transactions per page
+        const totalTransactions = JSON.parse('<%- JSON.stringify(User.wallet.transactions.length) %>');
+        const totalPages = Math.ceil(totalTransactions / transactionsPerPage);
+        console.log(totalTransactions);
+        console.log(totalPages);
+        function showTransactions(page) {
+            const startIndex = (page - 1) * transactionsPerPage;
+            const endIndex = startIndex + transactionsPerPage;
+            const transactions = JSON.parse('<%- JSON.stringify(User.wallet.transactions) %>').slice(startIndex, endIndex);
+            console.log(transactions);
+            const transactionTable = document.getElementById("transactionTable");
+            
+            if (!transactionTable) {
+                console.error("Element with id 'transactionTable' not found");
+                return;
+            }
+
+            transactionTable.innerHTML = '';
+
+            transactions.forEach((transaction) => {
+                const transactionRow = document.createElement("div");
+                transactionRow.classList.add("transaction-row");
+
+                transactionRow.innerHTML = `
+                    <span class="date">${transaction.date.slice(0,10)}</span>
+                    <span class="description-wallet">${transaction.description}</span>
+                    <span class="amount ${transaction.amount >= 0 ? 'positive' : 'negative'}">
+                        ${transaction.amount >= 0 ? '+' : '-'}₹${Math.abs(transaction.amount).toFixed(2)}
+                    </span>
+                `;
+
+                transactionTable.appendChild(transactionRow);
+            });
+        }
+
+        function showPaginationLinks() {
+            const paginationContainer = document.getElementById("paginationContainer");
+
+            if (!paginationContainer) {
+                console.error("Element with id 'paginationContainer' not found");
+                return;
+            }
+
+            paginationContainer.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLink = document.createElement("a");
+                pageLink.href = "#";
+                pageLink.textContent = i;
+                pageLink.addEventListener("click", () => showTransactions(i));
+
+                paginationContainer.appendChild(pageLink);
+            }
+        }
+
+        // Initial display (show the first page)
+        showTransactions(1);
+        showPaginationLinks();
+    });
+</script>
+
+        
+
+
+
+         <script>
+            function showAllTransactions() {
+                // Fade out wallet container
+                const walletContainer = document.getElementById("walletContainer");
+                walletContainer.style.opacity = 0;
+                
+                // After a short delay, hide the wallet container and show all transactions
+                setTimeout(() => {
+                    walletContainer.style.display = "none";
+                    const allTransactionsContainer = document.getElementById("allTransactionsContainer");
+                    allTransactionsContainer.style.display = "block";
+                    allTransactionsContainer.style.opacity = 1;
+                }, 500); // Adjust the delay (in milliseconds) based on your preference
+            }
+        </script>
+        
+
+
+
+
+
+
+       <script>
+        const profileContainer = document.getElementById('profile-container');
+        const notificationContainer = document.getElementById('notification-container');
+
+function showNotification(message) {
+    notificationContainer.textContent = message;
+    notificationContainer.style.display = 'block';
+
+    setTimeout(() => {
+        notificationContainer.style.display = 'none';
+    }, 3000);
+}  
+
+
+function showFieldError(fieldId, errorMessage) {
+    const errorContainer = document.getElementById(`${fieldId}-error`);
+    if (errorContainer) {
+        errorContainer.textContent = errorMessage;
+        errorContainer.style.display = errorMessage ? 'block' : 'none';
+    }
+}
+
+function updateProfile() {
+    // Gather updated data from the form
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const gender = document.querySelector('input[name="gender"]:checked').value || '';
+
+    // Define a function to reset all field errors
+    function resetFieldErrors() {
+        showFieldError('firstName', '');
+        showFieldError('lastName', '');
+        // Add more fields as needed
+    }
+
+    // Reset field errors before validation
+    resetFieldErrors();
+
+    let isValid = true;
+
+    if (!firstName) {
+        isValid = false;
+        showFieldError('firstName', 'First name cannot be empty.');
+    } else if (!/^[a-zA-Z ]+$/.test(firstName)) {
+        isValid = false;
+        showFieldError('firstName', 'First name can only contain letters and spaces.');
+    }
+
+    if (!lastName) {
+        isValid = false;
+        showFieldError('lastName', 'Last name cannot be empty.');
+    } else if (!/^[a-zA-Z ]+$/.test(lastName)) {
+        isValid = false;
+        showFieldError('lastName', 'Last name can only contain letters and spaces.');
+    }
+
+    // Display error message and prevent submission if invalid
+    if (!isValid) {
+        return; // Prevent further processing
+    }
+
+    const data = {
+        firstName: firstName,
+        lastName: lastName,
+        gender: gender
+    };
+    console.log(data);
+    // Send a fetch POST request to update the profile
+    fetch('/updateProfile', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        showNotification('Profile updated successfully');
+        console.log('Profile updated successfully:', result);
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('Error updating profile:', error);
+    });
+}
+
+function updatepassword() {
+    // Gather data from the form
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const repeatNewPassword = document.getElementById('repeatNewPassword').value;
+     
+    console.log('1')
+    
+
+    function resetFieldErrors() {
+    // Reset specific field errors
+    showFieldError('currentPassword', '');
+    showFieldError('newPassword', '');
+    showFieldError('repeatPassword', '');
+}
+
+// Call resetFieldErrors before performing any new validations for password
+resetFieldErrors();
+    
+    console.log('data')
+        
+    let isValid = true;
+
+    // Validate current password (add more validation if needed)
+    if (!currentPassword) {
+        isValid = false;
+        showFieldError('currentPassword', 'Current password cannot be empty.');
+    }
+
+    // Validate new password (add more validation if needed)
+    if (!newPassword) {
+        isValid = false;
+        showFieldError('newPassword', 'New password cannot be empty.');
+    }
+
+    // Validate repeat new password
+    if (!repeatNewPassword) {
+        isValid = false;
+        showFieldError('repeatNewPassword', 'Repeat new password cannot be empty.');
+    } else if (newPassword !== repeatNewPassword) {
+        isValid = false;
+        showFieldError('repeatNewPassword', 'Passwords do not match.');
+    }
+
+    // Display error message and prevent submission if invalid
+    if (!isValid) {
+        return; // Prevent further processing
+    }
+
+    // Continue with the fetch request to update the password
+    const data = {
+        currentPassword: currentPassword,
+        newPassword: newPassword
+    };
+    console.log(data)
+    // Send a fetch POST request to update the password
+    fetch('/updatePassword', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.error){
+        showFieldError('currentPassword', 'Current password is wrong');
+        }else{
+            showNotification('Password updated successfully');
+        
+        }
+        
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('Error updating password:', error);
+        showNotification('Error updating password. Please try again.');
+    });
+}
+
+</script>
+
+<script>
+    function editAddress(addressData) {
+        const address = JSON.parse(addressData);
+
+        // Populate the modal fields with the address details
+        document.getElementById('editAddressType').value = address.addresstype;
+        document.getElementById('editHouseName').value = address.houseName;
+        document.getElementById('editStreet').value = address.street;
+        document.getElementById('editCity').value = address.city;
+        document.getElementById('editState').value = address.state;
+        document.getElementById('editCountry').value = address.country;
+        document.getElementById('editZipCode').value = address.zipCode;
+         
+
+        const addressId = address._id
+        console.log(addressId)
+        // Show the modal
+
+        // Add logic to handle the edit operation when the user clicks "Save Changes"
+        document.getElementById('saveChangesBtn').addEventListener('click', async function () {
+            // Get the updated values from the modal fields
+            const updatedAddress = {
+                addresstype: document.getElementById('editAddressType').value,
+                houseName: document.getElementById('editHouseName').value,
+                street: document.getElementById('editStreet').value,
+                city: document.getElementById('editCity').value,
+                state: document.getElementById('editState').value,
+                country: document.getElementById('editCountry').value,
+                zipCode: document.getElementById('editZipCode').value
+            };
+
+            // Add fetch request to update the address on the server
+            try {
+                const response = await fetch('/updateaddress', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        addressId: address._id,
+                        updatedAddress: updatedAddress,
+                    }),
+                });
+
+                if (response.ok) {
+                    // Address updated successfully
+                    console.log('Address updated successfully');
+                    // Close the mo
+                    document.querySelector('[data-dismiss="modal"]').click();
+        // Show notification
+                     showNotification('Address updated successfully');
+                      
+
+                } else {
+                    // Handle error response
+                    console.error('Error updating address:', response.statusText);
+                }
+            } catch (error) {
+                // Handle fetch error
+                console.error('Fetch error:', error);
+            }
+        });
+    }
+
+
+    function confirmDelete(addressId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Call the deleteAddress function when the user confirms
+            deleteAddress(addressId);
+        }
+    });
+}
+
+function deleteAddress(addressId) {
+    // Your logic to delete the address goes here
+    console.log('Deleting address with ID:', addressId);
+
+    fetch('/deleteaddress',{
+        method:'POST',
+        headers:{
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({addressId})
+
+    })
+    .then(response => response.json())
+    .then(data=>{
+             window.location.reload()
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('Error :', error);
+        
+    });
+}
+
+
+async function addaddress (){
+    const addressType = document.getElementById('addAddressType').value;
+    const houseName = document.getElementById('addHouseName').value;
+    const street = document.getElementById('addStreet').value;
+    const city = document.getElementById('addCity').value;
+    const state = document.getElementById('addState').value;
+    const country = document.getElementById('addCountry').value;
+    const zipCode = document.getElementById('addZipCode').value;
+
+    // Create an object with the address data
+    const addressData = {
+        addresstype: addressType,
+        houseName: houseName,
+        street: street,
+        city: city,
+        state: state,
+        country: country,
+        zipCode: zipCode
+    };
+
+    fetch('/checkout/add_address', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(addressData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('[data-dismiss="modal"]').click();
+        // Show notification
+                     showNotification('Address added successfully');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+
+}
+
+
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Trigger a click on the "My Orders" link
+        var myOrdersLink = document.querySelector('a[data-toggle="list"][href="#account-social-links"]');
+
+        if (myOrdersLink) {
+            myOrdersLink.click();
+        }
+    });
+</script>
+
+
+
+<script>
+   function confirmCancel(itemId, orderId,status) {
+
+    if(status=='cancelled'){
+        Swal.fire("Already Cancelled", "This item has already been cancelled.", "info");
+        return;
+    }
+    Swal.fire({
+        title: "Are you sure you want to cancel?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, cancel it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Send a POST request to the server to cancel the order
+            fetch('/cancelorder', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ orderId: orderId, itemId: itemId }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update UI to reflect cancellation
+                    Swal.fire("Cancelled!", "Ordered item has been cancelled.", "success");
+                    const statusElement = document.getElementById(`status-${itemId}`);
+                       if (statusElement) {
+                       statusElement.textContent = "Status: cancelled";
+                    }
+                    const cancelBtn = document.getElementById(`cancel-btn-${itemId}`);
+                    if (cancelBtn) {
+                           cancelBtn.parentNode.removeChild(cancelBtn);
+                    }
+                                
+
+                } else {
+                    Swal.fire("Error", "Failed to cancel the order.", "error");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire("Error", "An error occurred while cancelling the order.", "error");
+            });
+        }
+    });
+}
+</script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+<script>
+function initializeRazorpay() {
+    
+    const amount = document.getElementById('addmoney').value
+    const enteredAmount = parseInt(amount)
+   
+    const errorContainer = document.getElementById('error-container');
+
+    if (isNaN(enteredAmount) || enteredAmount < 50 || enteredAmount > 10000) {
+        errorContainer.innerText = 'Please enter a valid amount between 50 and 10,000.';
+        return;
+    }
+
+    errorContainer.innerText = '';
+
+    fetch('/create-order', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ amount: 100, currency: 'INR' }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    const options = {
+      key:  'rzp_test_JkT3o5VYOxKgH3', 
+      amount: data.amount,
+      currency: 'INR',
+      name: 'A-Store',
+      description: 'Test Transaction',
+      image: 'https://example.com/your_logo',
+      order_id: data.orderId,
+      handler: function (response) {
+        console.log('Payment successful! Payment ID:', response.razorpay_payment_id);
+        fetch('/walletadd', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ amount: amount }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            const balanceElement = document.querySelector('.balance p');
+            const newBalance = data.message; // Replace with the actual property in your response data
+            balanceElement.innerText = ` ₹ ${newBalance}`;
+            Swal.fire({
+            icon: 'success',
+            title: 'Payment Successful!',
+            customClass: {
+            container: 'custom-swal-container'
+                 },
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+
+
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Show a SweetAlert toast on error
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Failed to add money to the wallet.',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    });
+
+    },
+      prefill: {
+        name: 'Akhil',
+        email: 'akhil@example.com',
+        contact: '9000090000'
+      },
+      notes: {
+        address: 'Razorpay Corporate Office'
+      },
+      theme: {
+        color: '#3399cc'
+      } 
+    };
+
+
+    const rzp = new Razorpay(options);
+    
+    // Open the Razorpay payment modal when the radio button is selected
+    rzp.open();
+
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+</script>
+
+<script>
+    function failedpay(totalprice,orderId){
+        
+  fetch('/create-order', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ amount: totalprice, currency: 'INR' }), // Adjust amount and currency as needed
+  })
+    .then(response => response.json())
+    .then(data => {
+      const options = {
+        key: 'rzp_test_JkT3o5VYOxKgH3', // Replace with your Razorpay key
+        amount: data.amount,
+        currency: 'INR',
+        name: 'A-Store',
+        description: 'Test Transaction',
+        image: 'https://example.com/your_logo',
+        order_id: data.orderId,
+        handler: function (response) {
+          // Handle successful payment
+            // Payment successful
+            console.log('Payment successful! Payment ID:', response.razorpay_payment_id);
+            fetch('/failedpay', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({orderId : orderId}),
+            })
+              .then(response => response.json())
+              .then(data => {
+                console.log('Success:', data);
+                // Show the success popup
+                window.location.reload()
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+        },
+        prefill: {
+          name: 'Akhil',
+          email: 'akhil@example.com',
+          contact: '9000090000',
+        },
+        notes: {
+          address: 'Razorpay Corporate Office',
+        },
+        theme: {
+          color: '#3399cc',
+        },
+      };
+
+      const rzp = new Razorpay(options);
+
+      // Open the Razorpay payment modal when the radio button is selected
+      rzp.open();
+
+      // Handle payment failed event
+    //   rzp.on('payment.failed', function (response) {
+    //     console.error('Payment failed with error:', response);
+    //     fetch('/checkout', {
+    //           method: 'POST',
+    //           headers: {
+    //             'Content-Type': 'application/json',
+    //           },
+    //           body: JSON.stringify({ ...dataa, Paymentstatus: 'failed' }),
+    //         })
+    //           .then(response => response.json())
+    //           .then(data => {
+    //             console.log('Success:', data);
+    //              rzp.close();
+
+    //             handlePaymentFailure(response);
+    //           })
+    //           .catch(error => {
+    //             console.error('Error:', error);
+    //           });
+       
+    //   });
+
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
+    }
+</script>
+
+   
+    </div>
+
+<%-include('footer')%>

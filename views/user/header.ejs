@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-light">
+        <a class="navbar-brand text-dark" href="/home" >
+            <img src="/img/logo-black.png"  style="width: 50px; height:auto ;"> 
+        </a>
+        
+        <% let isCategoryListed = categories.some(category => category.name == 'Headphone' && category.isListed); %>
+        <% if (isCategoryListed) { %>
+          <a class="nav-link text-dark active" href="/headphone">
+            Headphones
+          </a>
+        <% } %>
+        
+        <% let isSpeakerListed = categories.some(category => category.name == 'Speaker' && category.isListed); %>
+        <% if (isSpeakerListed) { %>
+          <a class="nav-link text-dark active" href="/speaker">
+            Speakers
+          </a>
+        <% } %>
+        
+        <% let isSoundbarListed = categories.some(category => category.name == 'Sound Bar' && category.isListed); %>
+        <% if (isSoundbarListed) { %>
+          <a class="nav-link text-dark active" href="/soundbar">
+            Sound Bar
+          </a>
+        <% } %>
+        
+        
+        
+        
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+           
+            <li class="nav-item dropdown ">
+              <a class="nav-link  text-dark" href="/headphone" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Headphones
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      
+                
+                <div class="container ">
+                  <div class="row ">
+                    <div class="col-md-4">
+                      
+                      <ul class="nav flex-column  ">
+                      <li class="nav-item ">
+                        <a class="nav-link  active text-dark " href="#">True Wireless Earbuds</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active text-dark" href="#">Over-Ear & On-Ear Headphones</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active text-dark" href="#">In Ear Headphones</a>
+                      </li>
+                    </ul>
+                    </div>
+                    /.col-md-4 
+                    <div class="col-md-4">
+                      <ul class="nav flex-column">
+                      <li class="nav-item">
+                        <a class="nav-link active text-dark" href="#">Gaming Headsets</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active text-dark" href="#">Sports Headphones</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active text-dark" href="#">Browse All</a>
+                      </li>
+                    </ul>
+                    </div>
+                    /.col-md-4 
+                    <div class="col-md-4">
+                      <a target="_blank" href="#">
+                        <img src="#">
+                      </a>
+                      <p class="text-white">Get Free Guides</p>
+      
+                    </div> 
+                    /.col-md-4 
+                  </div>
+                </div>
+                 /.container 
+      
+      
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link text-dark" href="/speakers" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Speakers
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      
+      
+                <div class="container">
+                  <div class="row">
+                    <div class="col-md-4">
+                     
+                      <ul class="nav flex-column">
+                        <li class="nav-item ">
+                          <a class="nav-link  active text-dark " href="#">Bluetooth Speakers</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link active text-dark" href="#">Party Speakers</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link active text-dark" href="#">Outdoor Speakers</a>
+                        </li>
+                    </ul>
+                    </div>
+                    /.col-md-4 
+                    <div class="col-md-4">
+                      <ul class="nav flex-column">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link item</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link item</a>
+                      </li>
+                    </ul>
+                    </div>
+                    /.col-md-4 
+                    <div class="col-md-4">
+                      <a target="_blank" href="https://bootstrapcreative.com/shop/jake-portfolio-hubspot-theme/">
+                        <img src="https://i0.wp.com/bootstrapcreative.com/wp-bc/wp-content/uploads/2022/01/jake-portfolio-cover.jpg?w=200&ssl=1" alt="Portfolio Website Templates" class="img-fluid">
+                      </a>
+                      <p class="text-white">Create a Portfolio Website Fast</p>
+      
+                    </div>
+                    /.col-md-4 
+                  </div>
+                </div>
+                 /.container 
+      
+      
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link  text-dark" href="/soundbar" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Sound Bar
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      
+      
+                <div class="container">
+                  <div class="row">
+                    <div class="col-md-4">
+                  
+                      <ul class="nav flex-column">
+                        <li class="nav-item ">
+                          <a class="nav-link  active text-dark " href="#">SB-Series</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link active text-dark" href="#">Dolby-Series</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link active text-dark" href="#">Refurbished SoundBars</a>
+                        </li>
+                    </ul>
+                    </div>
+                    /.col-md-4 
+                    <div class="col-md-4">
+                      <ul class="nav flex-column">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link item</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link item</a>
+                      </li>
+                    </ul>
+                    </div>
+                    /.col-md-4 
+                    <div class="col-md-4">
+      
+                      <a target="_blank" href="https://bootstrapcreative.com/resources/">
+                        <img src="https://i0.wp.com/bootstrapcreative.com/wp-bc/wp-content/uploads/2020/09/Filtered-Paint-Image-Instagram-Square.png?w=200&ssl=1" alt="Web Design Resources" class="img-fluid">
+                      </a>
+                      <p class="text-white">Free Web Design Resources</p>
+                      
+                    </div>
+                    /.col-md-4 
+                  </div>
+                </div>
+                 /.container 
+      
+      
+              </div>
+            </li> -->
+      
+          <!-- </ul> -->
+          <div class="right">
+            <form class="form-inline my-2 my-lg-0" action="/search" method="GET">
+              <input class="form-control mr-sm-2" type="search" name="product" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-light my-2 my-sm-0" type="submit"><img src="/img/search.svg"></button>
+          </form>
+          
+          
+         <div class="nav-icons">
+           <a href="/wishlist" class="nav-item"><img src="/img/heart.svg" alt="...."> </a>  
+           <a href="/cart" class="nav-item"><img src="/img/cart.svg" alt="...."> </a>      
+           <a href="/profile" class="nav-item"><img src="/img/person-circle.svg" > </a>
+           <% if (issession) { %>
+            <a href="/logout">Logout</a>
+        <% } %>
+        
+             
+
+         </div>
+      
+        </div>
+      </nav>

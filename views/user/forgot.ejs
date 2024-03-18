@@ -1,0 +1,105 @@
+<%-include('header')%>
+
+
+<style>
+    .forget {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* background-color: #d3d3d3; */
+        color: #fff;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 100px;
+        /* min-height: 100vh; */
+    }
+
+   .forget .container1 {
+        background-color: #fff;
+        color: #000;
+        padding:10px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        text-align: center;
+    }
+
+   .forget form {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+   .forget h2 {
+        color: #000;
+    }
+
+    .forget label {
+        margin-bottom: 10px;
+        color: #000;
+    }
+
+   .forget input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        border: 1px solid #000;
+        border-radius: 4px;
+    }
+
+   .forget button {
+        background-color: #000;
+        color: #fff;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+   .forget button:hover {
+        background-color: #333;
+    }
+
+</style>
+<div class="forget">
+    <div class="container1">
+        <h2>Email Verification</h2>
+        <form id="emailVerificationForm" action="/forgot" method="post">
+            <label for="email">Enter your email:</label>
+            <input id="email" name="email" required onkeydown="handleEnterKey(event)">
+            <p id="emailError" style="color: red;">
+                <%= mes || '' %> 
+            </p> <!-- Display error message -->
+            <button type="button" onclick="validateEmail()">Verify Email</button>
+        </form>
+    </div>
+</div>
+
+
+    <script>
+        emailError.textContent = ''
+        function validateEmail() {
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (emailRegex.test(emailInput.value)) {
+                // Email is valid, submit the form
+                document.getElementById('emailVerificationForm').submit();
+            } else {
+                // Invalid email, display error message
+                emailError.textContent = 'Please enter a valid email address.';
+            }
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent form submission
+                validateEmail();
+            }
+        }
+    </script>
+<%-include('footer')%>

@@ -1,0 +1,334 @@
+<!-- views/productList.ejs -->
+<%-include('header')%>
+    <style>
+        .categ {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            padding: 20px;
+            background-color: #fff; /* Set your background color */
+            color: #000; /* Set your text color */
+            font-family: 'Arial', sans-serif;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            margin-left: 75px;
+            margin-top: 20px;
+        }
+
+        .card-container {
+            /* margin-left: 175px; */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        .card-container a {
+        text-decoration: none;
+    }
+        .card {
+            cursor: pointer;
+            border: 1px solid #000; /* Set your border color */
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-out;
+            margin: 40px;
+            width: 220px;
+            height: 300px;
+            background-color: #e2e2e2;
+
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #000; /* Set your border color */
+        }
+
+        .card-content {
+            padding: 16px;
+            text-align: left;
+        }
+
+      .card  h4 {
+            margin-top: 0;
+            color: #000; /* Set your heading color */
+        }
+
+        .card  p {
+            margin: 0;
+            color: #333; /* Set your paragraph text color */
+        }
+
+        .card .price {
+            font-weight: bold;
+            color: #000; /* Set your price color */
+        }
+
+        .card  .rating {
+            color: #777; /* Set your rating color */
+        }
+        .price-container {
+    display: flex;
+    align-items: baseline;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #999; /* Optional: Gray color for original price */
+    margin-right: 8px; /* Optional: Adjust spacing between prices */
+}
+
+.discounted-price {
+    color: #e44d26; /* Optional: Customize color for discounted price */
+    font-weight: bold; /* Optional: Make the discounted price bold */
+}
+.sidebar{
+    min-width : 256px;
+    margin-top: 30px;
+}
+.filter-section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+        background-color: #d1d1d1;
+        color: #000;
+        font-family: 'Arial', sans-serif;
+        margin-right: 10px; /* Adjust margin as needed */
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+    .filter-section:hover {
+        background-color: #e0e0e0; /* Change the background color on hover */
+    }
+
+    .filter-section h3 {
+        margin-bottom: 10px;
+        font-size: 1.5em;
+        color: #333; /* Set heading color */
+    }
+
+    .filter-section label {
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #555; /* Set label color */
+    }
+
+    .filter-section select {
+        margin-bottom: 15px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 100%;
+    }
+    .filter-section button {
+    padding: 10px;
+    background-color: #3498db; /* Set your desired background color */
+    color: #fff; /* Set your desired text color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-section button:hover {
+    background-color: #2980b9; /* Set your desired hover background color */
+}
+
+  /* Additional styles for filtered items */
+  .filtered-out {
+        display: none;
+    }
+    .pagination {
+    margin-top: 20px;
+    margin-right:70px;
+    text-align: right; /* Align pagination content to the right */
+    display: flex; /* Use flexbox for alignment */
+    justify-content: flex-end; /* Align items to the end (right side) */
+}
+
+
+.pagination button {
+    padding: 8px 10px;
+    margin: 0 5px;
+    background-color: #87908d;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+    background-color: #2980b9;
+}
+
+.pagination button.active {
+    background-color: #2980b9;
+}
+
+    </style>
+
+<h1>Sound Bar</h1>
+
+
+<div class="categ">
+
+    <div class="sidebar">
+        <div class="filter-section">
+            <h3>Filters</h3>
+            <!-- Add filter options for brand -->
+            <label for="brandFilter">Brand:</label>
+            <select id="brandFilter">
+                <option value="all">All Brands</option>
+                <option value="JBL">JBL</option>
+                <option value="Boat">Boat</option>
+                <!-- ... (add more options as needed) ... -->
+            </select>
+
+            <!-- Add filter options for color -->
+            <label for="colorFilter">Color:</label>
+            <select id="colorFilter">
+                <option value="all">All Colors</option>
+                <option value="Black">Black</option>
+                <option value="Red">Red</option>
+                <option value="White">White</option>
+                <!-- ... (add more options as needed) ... -->
+            </select>
+
+            <!-- Add filter options for price -->
+            <label for="priceFilter">Price Range:</label>
+            <select id="priceFilter">
+                <option value="all">All Prices</option>
+                <option value="0-5000">0 - 5000</option>
+                <option value="5000-10000">5000 - 10000</option>
+                <!-- ... (add more options as needed) ... -->
+            </select>
+
+            <!-- Add Apply button -->
+            <button type="button" id="applyFilters" onclick="applyFilters()">Apply</button>
+        </div>
+    </div>
+
+
+    <div class="card-container">
+        <% products.forEach(product => { %>
+            <a href="/display/<%= product.name%>" class="product-card" data-brand="<%= product.brand %>" data-color="<%= product.color %>" data-price="<%= product.price %>">
+
+            <div class="card">
+                <img src="<%= product.productImages[0] %>" alt="<%= product.name %>">
+                <div class="card-content">
+                    <h4><%= product.name %></h4>
+                    <div class="price-container">
+                        <% if (product.offerprice && product.offerprice < product.price) { %>
+                            <span class="original-price">₹<%= product.price %></span>
+                            <span class="discounted-price">₹<%= product.offerprice %></span>
+                        <% } else { %>
+                            <span class="regular-price">₹<%= product.price %></span>
+                        <% } %>
+                    </div>
+                    <!-- Add other product details as needed -->
+                </div>
+            </div></a>
+        <% }); %>
+    </div>
+</div>
+<div class="pagination">
+    <!-- Navigation buttons/links will be added dynamically here -->
+</div>
+
+<%-include('footer')%>
+
+<script>
+    function applyFilters() {
+     // Get selected filter values
+     var brandFilterValue = document.getElementById('brandFilter').value;
+     var colorFilterValue = document.getElementById('colorFilter').value;
+     var priceFilterValue = document.getElementById('priceFilter').value;
+ 
+     // Apply filters to the product cards
+     var productCards = document.querySelectorAll('.product-card');
+     productCards.forEach(function (card) {
+         console.log(card);
+         var cardBrand = card.getAttribute('data-brand');
+         var cardColor = card.getAttribute('data-color');
+         var cardPrice = parseInt(card.getAttribute('data-price'));
+         
+         var brandFilterMatch = (brandFilterValue === 'all' || brandFilterValue === cardBrand);
+         var colorFilterMatch = (colorFilterValue === 'all' || colorFilterValue === cardColor);
+         var priceFilterMatch = (priceFilterValue === 'all' || checkPriceRange(priceFilterValue, cardPrice));
+         
+         // Show/hide cards based on filter matches
+         if (brandFilterMatch && colorFilterMatch && priceFilterMatch) {
+             card.style.display = 'inline-block';
+         } else {
+             card.style.display = 'none';
+         }
+     });
+ }
+ 
+ function checkPriceRange(range, price) {
+     var ranges = range.split('-');
+     var min = parseInt(ranges[0]);
+     var max = parseInt(ranges[1]);
+ 
+     return (price >= min && price <= max);
+ }
+ </script>
+
+<script>
+    // Constants
+    const itemsPerPage = 8; // Change this according to your preference
+
+    // Function to initialize pagination
+    function initPagination() {
+        var productCards = document.querySelectorAll('.product-card');
+        var totalPages = Math.ceil(productCards.length / itemsPerPage);
+
+        // Generate navigation buttons/links
+        var paginationContainer = document.querySelector('.pagination');
+        paginationContainer.innerHTML = '';
+
+        for (var i = 1; i <= totalPages; i++) {
+            var pageButton = document.createElement('button');
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', function () {
+                showPage(parseInt(this.textContent));
+            });
+            paginationContainer.appendChild(pageButton);
+        }
+
+        // Show the first page by default
+        showPage(1);
+    }
+
+    // Function to display products for the specified page
+    function showPage(pageNumber) {
+        var startIndex = (pageNumber - 1) * itemsPerPage;
+        var endIndex = startIndex + itemsPerPage;
+        var productCards = document.querySelectorAll('.product-card');
+
+        productCards.forEach(function (card, index) {
+            if (index >= startIndex && index < endIndex) {
+                card.style.display = 'inline-block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Call initPagination function when the page loads
+    window.addEventListener('load', function () {
+        initPagination();
+    });
+</script>

@@ -1,0 +1,325 @@
+<%- include('header') %>
+
+<style>
+   
+   
+    /* Styling for the page layout */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 0 20px;
+    }
+
+    h2 {
+        margin: 20px 0;
+        font-size: 24px;
+    }
+
+    /* Styling for the filters */
+    .filter-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .filter-container .filter-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .filter-group label {
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    .filter-group input[type="date"],
+    .filter-group select {
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+    }
+
+    .filter-group input[type="submit"] {
+        padding: 8px 16px;
+        border-radius: 4px;
+        border: none;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .filter-group input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    /* Styling for the table */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    th {
+        background-color: #000000;
+        font-weight: bold;
+    }
+
+    /* Styling for pagination */
+    .pagination {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .pagination a {
+        padding: 8px 16px;
+        text-decoration: none;
+        color: #333;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .pagination a:hover {
+        background-color: #f2f2f2;
+    }
+
+    /* Styling for download icons */
+    .download-icons {
+        text-align: right;
+    }
+
+    .download-icons img {
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+    /* Styling for the range container */
+.rang-container {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: flex-start; /* Align items horizontally */
+    margin-bottom: 20px;
+}
+
+.rang {
+    margin-left: 10px; /* Adjust spacing between range forms */
+}
+
+.rang form {
+    display: flex;
+    align-items: center;
+    /* margin-right: 10px; Adjust margin between forms */
+}
+
+.rang label,
+.rang input,
+.rang select,
+.rang input[type="submit"] {
+    margin-right: 10px;
+}
+
+.btn{
+    background-color: #45a049;
+    color: antiquewhite;
+}
+.thead{
+    /* background-color: black; */
+    color: white;
+}
+
+    
+    
+</style>
+<h2 style="margin: 20px ;">Sales Report</h2>
+<div class="rang-container">
+    <div class="rang">
+        <form action="/admin/salesreport" method="get">
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" value="<%= startDate %>">
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" name="endDate" value="<%= endDate %>">
+            <input type="submit"  class="btn" value="Apply Filter">
+        </form>
+    </div>
+    <div class="rang">
+        <form action="/admin/salesreport" method="get">
+            <label for="period">Time Range:</label>
+            <select id="period" name="period">
+                <option value="day">1 Day</option>
+                <option value="week">1 Week</option>
+                <option value="month">1 Month</option>
+            </select>
+            <input type="submit" class="btn" value="Apply Filter">
+        </form>
+    </div>
+    <div class="rang">
+        <form action="/admin/salesreport" method="get">
+            <label for="selectedDate">Select Date:</label>
+            <input type="date" id="selectedDate" name="selectedDate">
+            <input type="submit" class="btn " value="Apply Filter">
+        </form>
+    </div>
+    
+    
+</div>
+
+
+
+<div class="download-icons">
+    <!-- Excel download link -->
+    <!-- <a href="#" onclick="excel('<%= JSON.stringify(download) %>')" title="Download Excel"> -->
+        <img src="/img/Excel.png" alt="Excel Icon" width="50" onclick="excel('<%= JSON.stringify(download) %>')" height="50">
+    <!-- </a> -->
+
+    <!-- PDF download link -->
+        <img src="/img/pdf.png" alt="PDF Icon" width="50"  onclick="pdf('<%= JSON.stringify(download) %>')" height="50">
+    
+</div>
+
+
+<div class="container">
+
+<table>
+    <thead class="thead">
+        <tr>
+            <th>Date</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Total Amount</th>
+            <th>Number of Orders</th>
+        </tr>
+    </thead>
+    <tbody>
+      
+        <% for (let i = 0; i < result.length ; i++) { %>
+            <tr>
+                <td><%= result[i]._id.date %></td>
+                <td><%= result[i]._id.productName %></td>
+                <td><%= result[i].totalQuantity %></td>
+                <td><%=  Math.floor(result[i].totalSales) %></td>
+                <td><%= result[i].countOrders %></td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+
+<div class="pagination">
+    <% if (currentPage > 1) { %>
+        <a href="/admin/salesreport/?page=<%= currentPage - 1 %>&limit=<%= limit %>&startDate=<%= startDate %>&endDate=<%= endDate %>">Previous</a>
+    <% } %>
+
+    Page <%= currentPage %> of <%= totalPages %>
+
+    <% if (currentPage < totalPages) { %>
+        <a href="/admin/salesreport/?page=<%= currentPage + 1 %>&limit=<%= limit %>&startDate=<%= startDate %>&endDate=<%= endDate %>">Next</a>
+    <% } %>
+</div>
+</div>
+
+<script>
+        document.getElementById("startDate").max = new Date().toISOString().split('T')[0];
+        document.getElementById("endDate").max = new Date().toISOString().split('T')[0];
+
+        async function excel(downl) {
+            const download = JSON.parse(downl)
+            console.log(download);
+
+    try {
+        const response = await fetch('/admin/exceldownload', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(download),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        // Create a link element and trigger a click to initiate the download
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'sales_report.xlsx';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+        console.log('Excel download successful');
+
+        // You may need to adjust this based on the server response type
+        // const data = await response.json();
+        // console.log('Excel download successful:', data);
+
+        // Handle the downloaded data as needed
+    } catch (error) {
+        console.error('Error:', error);
+        // Handle errors
+    }
+}
+
+
+async function pdf(downl) {
+    const download = JSON.parse(downl);
+
+    try {
+        const response = await fetch('/admin/pdfdownload', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(download),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        // Create a link element and trigger a click to initiate the download
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `sales_report(${download[0]._id.date} - ${download[download.length-1]._id.date}).pdf`; // Change the file extension to .pdf
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+        console.log('PDF download successful');
+
+        // You may need to adjust this based on the server response type
+        // const data = await response.json();
+        // console.log('PDF download successful:', data);
+
+        // Handle the downloaded data as needed
+    } catch (error) {
+        console.error('Error:', error);
+        // Handle errors
+    }
+}
+
+</script>
+
+<%- include('footer') %>

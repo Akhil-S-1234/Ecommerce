@@ -1,0 +1,250 @@
+<%- include('header') %>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"> -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> -->
+
+
+<style>
+    table{
+border-spacing: 0px;
+width: 100%;
+border: 0.5px solid #ddd;
+}
+
+
+.table td,.table th{
+    border: 0.5px solid #8a8a8a;
+padding: .75em;
+vertical-align: top;
+text-align: center;
+
+}
+
+.table tr:hover{
+background-color: #dddddd;
+}
+
+.table .thead-dark th{
+color:#fff;
+background-color: rgb(23, 8, 8);
+border-color: #8a8a8a;
+}
+
+    .return-request {
+        border: 1px solid #ddd;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        padding: 20px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .return-request:hover {
+        transform: translateY(-5px);
+    }
+
+    .user-details {
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .product-details {
+        margin-bottom: 15px;
+        color: #555;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: space-between;
+        /* width: 200px; */
+        /* margin-top: 15px; */
+    }
+
+    .approve-button,
+    .reject-button {
+        padding: 10px 20px;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .approve-button {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .reject-button {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .approved-status,
+    .rejected-status {
+        text-align: center;
+        padding: 10px;
+        font-weight: bolder;
+        width: 200px;
+        margin-left: 50px;
+    }
+
+    .approved-status {
+        color: #0c8710;
+        background-color: #a7fcaa;
+    }
+
+    .rejected-status {
+        color: #f44336;
+        background-color: #ffa49e;
+    }
+    #site-main{
+        margin: 0 75px; /* 0 for top and bottom, 10em for left and right */
+        font-family: 'Barlow',sans-serif;
+}
+.breadcrumb {
+        background-color: #f8f9fa; /* Breadcrumb background color */
+        padding: 8px 15px;
+        border-radius: 4px;
+    }
+
+    .breadcrumb-item {
+        font-size: 14px;
+        color: #007bff; /* Breadcrumb link color */
+        text-decoration: none;
+    }
+
+    .breadcrumb-item.active {
+        color: #495057; /* Active breadcrumb text color */
+    }
+
+    .breadcrumb-item.active::before {
+        content: ">>"; /* Remove the separator before the active item */
+        display: block;
+    }
+
+    #site-main {
+        margin: 20px 75px; /* Adjusted margin for better spacing */
+        font-family: 'Barlow', sans-serif;
+    }
+</style>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/admin/orderlist">Orders</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Requests</li>
+    </ol>
+</nav>
+
+
+<main id="site-main">
+    <div class="container">
+<table id="example" class="table table-striped">
+
+    <thead class="thead-dark">
+        <tr>
+            <th>User</th>
+            <th>Email</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Reason</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% requestedOrders.reverse().forEach(order => { %>
+            <% order.items.forEach(item => { %>
+                <% if(item.returnRequest.requested){ %>
+                    <tr class="return-request">
+                        <td><%= `${order.user.firstName} ${order.user.lastName}` %></td>
+                        <td><%= order.user.email %></td>
+                        <td><%= item.product ? item.product.name : 'Product Not Available' %></td>
+                        <td><%= item.quantity %></td>
+                        <td><%= item.reason || 'Not provided' %></td>
+                        <td class="action-buttons"  id ="action-buttons-<%= item._id %>">
+                            <% if(item.returnRequest.status == 'pending') { %>
+                                <button class="approve-button" onclick="statusReturn('<%= order._id %>', '<%= item._id %>','approved')">Approve</button>
+                                <button class="reject-button" onclick="statusReturn('<%= order._id %>', '<%= item._id %>','rejected')">Reject</button>
+                                <span class="hi"></span>
+                            <% } else { %>
+                                <span class="<%= item.returnRequest.status == 'approved' ? 'approved-status' : 'rejected-status' %>">
+                                    <%= item.returnRequest.status.charAt(0).toUpperCase() + item.returnRequest.status.slice(1) %>
+                                </span>
+                            <% } %>
+                        </td>
+                    </tr>
+                <% } %>
+            <% }); %>
+        <% }); %>
+    </tbody>
+</table>
+</div>
+</main>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+
+    function statusReturn(orderId, itemId, status) {
+        fetch('/admin/approvereturn', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                orderId: orderId,
+                itemId: itemId,
+                status: status
+            }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    const approveButton = document.querySelector('.approve-button');
+                const rejectButton = document.querySelector('.reject-button');
+
+                if (approveButton && rejectButton) {
+                    approveButton.style.display = 'none';
+                    rejectButton.style.display = 'none';
+                } else {
+                    console.error('Buttons not found.');
+                }
+                // Create a new span element
+               const actionButtonsElement = document.getElementById(`.action-buttons-${itemId}`);
+
+                // Check if the parent element exists before appending the new span
+                if (actionButtonsElement) {
+                    // Create a new span element
+                    const newSpan = document.createElement('span');
+                    newSpan.className = status == 'approved' ? 'approved-status' : 'rejected-status';
+                    newSpan.textContent = status.charAt(0).toUpperCase() +status.slice(1);
+
+                    // Append the new span to the parent element
+                    actionButtonsElement.appendChild(newSpan);
+                } else {
+                    console.error('Action buttons element not found.');
+                }
+            }
+                console.log(data);
+                // You can perform additional actions based on the response if needed
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle errors
+            });
+    }
+</script>
+
+<%- include('footer') %>

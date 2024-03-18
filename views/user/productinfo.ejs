@@ -1,0 +1,511 @@
+<%-include('header')%>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+<style>
+
+    .product-details {
+        display: flex;
+        justify-content: space-around;
+        margin: 50px 200px 100px;
+    }
+
+    .product-images {
+        flex: 1;
+        max-width: 400px;
+        position: relative;
+    }
+
+    /* .main-image {
+        width: 400px;
+        height: 400px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    } */
+    .main-image {
+    width: 400px;
+    height: 400px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: opacity 0.3s ease; /* Add a transition for opacity */
+    /* Other styles */
+}
+
+
+    .small-images {
+        display: flex;
+        gap: 10px;
+        flex-direction: column; /* Change to column to align small images vertically */
+        position: absolute; /* Position small images absolutely within the product-images container */
+        top: 0;
+        left: -70px; /* Adjust the left position to move small images to the left of the main image */
+    }
+    
+
+    .small-image {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ddd; /* Add a border for the normal state */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.3s; /* Add a transition for a smooth effect */
+}
+
+.small-image:hover {
+    border: 3px solid;
+    border-color: #8d8c8c; /* Change the border color for the hover state */
+}
+
+    .product-info {
+        flex: 1;
+        margin-left: 70px;
+    }
+
+    .product-info h2 {
+        margin-top: 0;
+        color: #000;
+    }
+
+    .product-info p {
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .product-info .price {
+        font-weight: bold;
+        color: #000;
+        font-size: 1.2em;
+    }
+
+    .product-info .rating {
+        color: #777;
+        margin-bottom: 15px;
+    }
+
+    .product-actions {
+        display: flex;
+        align-items: center;
+    }
+
+    .add-to-cart {
+        background-color: #e90b0b;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 50px;
+    }
+
+    .buy-now {
+        background-color: #4f66ff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .add-to-cart:hover {
+        background-color: #c20101;
+    }
+
+    .buy-now:hover {
+        background-color: #6e84f1ef;
+    }
+ 
+
+.popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        max-width: 300px;
+        text-align: center;
+        border-radius: 8px;
+    }
+
+    .popup .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 18px;
+        color: #888;
+    }
+
+    .popup button {
+        background-color: #e90b0b;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+    .price-container {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+/* Add styles for original and discounted prices */
+.original-price {
+    text-decoration: line-through;
+    color: #888;
+    margin-right: 10px;
+}
+
+.discounted-price {
+    color: #e44d26;
+    font-weight: bold;
+}
+
+/* Add styles for regular price if needed */
+.regular-price {
+    color: #000;
+}
+/* Zoom styles */
+.zoom-container {
+    position: relative;
+    /* overflow: hidden; */
+}
+
+.image {
+    width: 100%;
+    height: auto;
+}
+
+.lens {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* background-color: rgba(255, 255, 255, 0.6); */
+    /* display: none; */
+}
+
+.result {
+    position: absolute;
+    left: 100%; /* Change this to the desired position */
+    top: 0;
+    width: 500px;
+    height: 500px;
+    background-repeat: no-repeat;
+    background-color: rgb(235, 235, 235);
+    /* display: none; */
+}
+
+.zoom-container:hover .lens,
+.zoom-container:hover .result {
+    display: block;
+}
+.additional-info {
+    margin-top: 20px;
+}
+
+.additional-info p {
+    margin: 20px 0;
+}
+
+.additional-info p strong {
+    margin-right: 10px;
+    display: inline-block;
+    width: 100px; /* Adjust the width as needed */
+}
+.breadcrumbs {
+    margin-top: 30px;
+       margin-left: 30px;
+            background-color: #ffffff;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .breadcrumbs a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+
+        .login-button {
+        background-color: #000000; /* Green */
+        border:  3px solid #575454;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+       
+    }
+
+    .login-button:hover {
+        background-color: #0e0e0e; /* Darker green */
+    }
+
+
+</style>
+
+<div class="popup" id="statusPopup">
+    <span class="close" onclick="closePopup()">&times;</span>
+    <div id="popupContent"></div>
+    <a href="/cart">View Cart</a>
+</div>
+<div class="overlay" id="overlay"></div>
+
+
+<div class="breadcrumbs">
+    <a href="/home">Home</a> / 
+    <a href="/<%= products.category.replace(/\s+/g, '').toLowerCase()%> "><%= products.category%></a> / 
+    <%= products.name%>
+</div>
+
+
+
+
+<div class="product-details">
+    <div class="product-images">
+        <!-- <div id="zoomContainer" class="zoom-container">
+            <img src="<%= products.productImages[0] %>" alt="<%= products.name %>" class="main-image">
+            
+        </div> -->
+            <div class="zoom-container">
+                <img src="<%= products.productImages[0] %>" alt="<%= products.name %>" class="main-image">
+                <div class="lens" data-productid=""></div>
+                <div class="result" data-productid="" style="z-index: 1000;"></div>
+            </div>
+        
+
+        <div class="small-images">
+            <% products.productImages.forEach((image, index) => { %>
+                <img src="<%= image %>" alt="<%= products.name %>" class="small-image" onmouseover="changeMainImage('<%= image %>')">
+            <% }); %>
+        </div>
+    </div>
+
+    <div class="product-info">
+        <h2><%= products.name %></h2>   
+        <p><%= products.description %></p>
+        <h3>Specifications</h3>   
+
+        <div class="additional-info">
+            <p style="margin-top: 20px;"><strong>Model:</strong> <%= products.model %></p>
+            <p><strong>Category:</strong> <%= products.category %></p>
+            <p><strong>Color:</strong> <%= products.color %></p>
+            <p><strong>Brand:</strong> <%= products.brand %></p>
+        </div>
+        <div class="price-container">
+            <% if (products.offerprice && products.offerprice < products.price) { %>
+                <span class="original-price">₹<%= products.price %></span>
+                <span class="discounted-price">₹<%= products.offerprice %></span>
+            <% } else { %>
+                <span class="price">₹<%= products.price %></span>
+            <% } %>
+        </div>
+
+        <div class="product-actions">
+            <% if (issession) { %>
+                <button class="add-to-cart" onclick="addToCart('<%= products._id %>', '<%= products.price %>')">Add to Cart</button>
+                <button class="buy-now" onclick="addtowish('<%= products._id %>')">Add to Wishlist</button>
+            <% } else { %>
+                <button class="login-button" onclick="window.location.href='/login'">Login to Add to Cart/Wishlist</button>
+            <% } %>
+            
+        </div>
+    </div>
+</div>
+<!-- 
+<script>
+    function changeMainImage(imageSrc) {
+        const mainImage = document.querySelector('.main-image');
+        mainImage.style.transform = 'translateX(-100%)'; // Slide to the left
+        setTimeout(() => {
+            mainImage.src = imageSrc;
+            mainImage.style.transform = 'translateX(0)'; 
+            const result = document.querySelector('.result');
+        result.style.backgroundImage = `url("${imageSrc}")`;
+        }, 300); // Adjust the duration to match the transition duration in CSS
+    }
+</script> -->
+<script>
+    function changeMainImage(imageSrc) {
+        const mainImage = document.querySelector('.main-image');
+        // mainImage.style.opacity = '0'; // Set opacity to 0 for a fade-out effect
+        setTimeout(() => {
+            mainImage.src = imageSrc; // Change the image source
+            mainImage.style.opacity = '1'; // Set opacity back to 1 for a fade-in effect
+            const result = document.querySelector('.result');
+            result.style.backgroundImage = `url("${imageSrc}")`; // Update the result image
+        }, 100); // Adjust the duration to match the transition duration in CSS
+    }
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function closePopup() {
+        document.getElementById('statusPopup').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+
+    function showPopup(message) {
+        document.getElementById('popupContent').innerHTML = message;
+        document.getElementById('statusPopup').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+    }
+
+    function addToCart(productId, productPrice) {
+        // Send an HTTP request to your server to add the product to the cart
+        fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                // userId: 'user123',  // Replace with the actual user ID (you may get this from your authentication system)
+                productId: productId,
+                productPrice: productPrice,
+                quantity: 1,  // You can adjust the quantity as needed
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showPopup('Product added to cart successfully!');
+            } else {
+                showPopup('Out of stock');
+            }
+        })
+        .catch(error => {
+            console.error('Error adding product to cart:', error);
+            showPopup('An error occurred. Please try again later.');
+        });
+    }
+
+
+ function addtowish(productId) {
+    
+  fetch('/wishlist/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ productId: productId }),
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if(data.exist){
+        Swal.fire({
+                icon: 'info',
+                title: '',
+                text: 'Product is already in your wishlist',
+            });
+      }else{
+      console.log('Product added to wishlist:', data);
+
+      Swal.fire({
+            icon: 'success',
+            title: 'Wishlist Updated',
+            text: 'Product added to wishlist successfully!',
+        });
+    }
+    })
+    .catch(error => {
+      console.error('Error adding product to wishlist:', error);
+      Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong. Please try again!',
+        });
+    });
+}
+
+</script>
+
+
+<script>
+    const containers = document.querySelectorAll(".zoom-container");
+
+    containers.forEach(container => {
+        const image = container.querySelector(".main-image");
+        const lens = container.querySelector(".lens");
+        const result = container.querySelector(".result");
+
+        container.addEventListener("mousemove", zoomImage);
+        container.addEventListener("mouseenter", () => {
+            lens.style.display = "block";
+            result.style.display = "block";
+        });
+        container.addEventListener("mouseleave", () => {
+            lens.style.display = "none";
+            result.style.display = "none";
+        });
+
+        result.style.backgroundImage = `url("${image.src}")`;
+
+        function zoomImage(e) {
+            const { x, y } = getMousePos(e);
+
+            lens.style.left = x + "px";
+            lens.style.top = y + "px";
+
+            const imageRect = image.getBoundingClientRect();
+            const lensRect = lens.getBoundingClientRect();
+
+            const fx = (image.width / lensRect.width) * 1;
+            const fy = (image.height / lensRect.height) * 1;
+
+            result.style.backgroundSize = `${image.width * fx}px ${image.height * fy}px`;
+            result.style.backgroundPosition = `-${x * fx}px -${y * fy}px`;
+        }
+
+        function getMousePos(e) {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left - lens.offsetWidth / 2;
+            const y = e.clientY - rect.top - lens.offsetHeight / 2;
+
+            return { x, y };
+        }
+
+        result.style.display = "none";
+    });
+</script>
+
+
+
+
+<%-include('footer')%>

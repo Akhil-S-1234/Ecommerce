@@ -1,0 +1,370 @@
+<%-include('header')%>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+  
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close:hover {
+        color: black;
+    }
+
+    .checkout {
+    display: flex; /* Add this line to align checkout container and order summary horizontally */
+    justify-content: space-between;
+}
+
+.checkout-container {
+    
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 20px;
+    flex-direction: column; /* Added this line to align vertically */
+}
+
+    .checkout-step {
+
+        width: 48%; /* Adjust as needed */
+        margin-bottom: 20px;
+        background-color: #fff;
+        padding: 20px;
+        /* border: 1px solid #ccc; */
+        box-sizing: border-box;
+    }
+
+    .addresses {
+        width: 600px;
+
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+    .address {
+        box-sizing: border-box;
+        width: 48%;
+        border: 1px solid #888;
+        padding: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .address input[type="radio"] {
+        margin-right: 5px;
+    }
+
+    .payment-methods {
+        width: 700px;
+
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .payment-method {
+        width: 58%;
+        margin-bottom: 10px;
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    .payment-method input[type="radio"] {
+        margin-right: 5px;
+    }
+
+    .order-summary {
+         margin-right: 250px;
+         width: 400px;
+        padding: 20px;
+        margin-top: 200px;
+       background-color: #fff;
+        box-sizing: border-box;
+}
+
+    .summary-heading {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .summary-total {
+        display: flex;
+        font-weight: 900;
+        justify-content: space-between;
+        margin-top: 20px;
+        border-top: 2px solid #ccc;
+        padding-top: 20px;
+    }
+
+    .summary-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    .proceed {
+    width: 250px;
+    height: 35px;
+    margin-left: 50px;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.proceed:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+.modal {
+        display: none;
+        position:absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 500px;
+        /* height: auto; */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close:hover {
+        color: black;
+    }
+
+    #new-address-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #new-address-form label {
+        margin-top: 10px;
+    }
+
+    #new-address-form input {
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    #new-address-form button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+    }
+
+    #new-address-form button:hover {
+        background-color: #45a049;
+    }
+</style>
+
+<div class="checkout">
+<div class="checkout-container">
+    <div id="shipping-address" class="checkout-step">
+        <h2>Shipping Address</h2>
+        <div class="addresses" id="addresses-container">
+            <% addresses.forEach(address => { %>
+                <div class="address">
+                    <input type="radio" name="selectedAddress" value="<%= address._id %>">
+                    <%= address.houseName %>, <%= address.street %>, <%= address.city %>, <%= address.state %>, <%= address.country %> - <%= address.zipCode %>
+                </div>
+            <% }); %>
+        </div>
+        <button onclick="showNewAddressForm()">Add New Address</button>
+        
+    </div>
+
+    <div id="payment-methods" class="checkout-step">
+        <h2>Payment Methods</h2>
+        <div class="payment-methods">
+            <div class="payment-method">
+                <input type="radio" name="paymentMethod" value="cod">
+                Cash on Delivery (COD)
+            </div>
+        </div>
+    </div>
+<button class="proceed" onclick="proceedToPayment()">Proceed to Payment</button>
+</div>
+
+ <!-- New Address Form Popup -->
+ <div id="new-address-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeNewAddressForm()">&times;</span>
+        <h2>Add New Address</h2>
+        <form id="new-address-form" action="/checkout/add_address" method="post" >
+            <label for="houseName">House Name:</label>
+            <input type="text" id="houseName" name="houseName" required>
+
+            <label for="street">Street:</label>
+            <input type="text" id="street" name="street" required>
+
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required>
+
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state" required>
+
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country" required>
+
+            <label for="zipCode">Zip Code:</label>
+            <input type="text" id="zipCode" name="zipCode" required>
+
+            <button type="submit" >Add Address</button>
+            <!-- onclick="addNewAddress()" -->
+        </form>
+    </div>
+</div>
+
+
+<div class="order-summary">
+    <div class="summary-heading">Order Summary</div>
+    <div class="summary-item">
+        <span>Item Subtotal:</span>
+        <span>₹<%= total %></span>
+    </div>
+    <div class="summary-item">
+        <span>Shipping Total:</span>
+        <span>Free</span>
+    </div>
+    <div class="summary-total">
+        <span>Total:</span>
+        <span>₹<%= total %></span>
+    </div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function showNewAddressForm() {
+        document.getElementById('new-address-modal').style.display = 'block';
+    }
+
+    function closeNewAddressForm() {
+        document.getElementById('new-address-modal').style.display = 'none';
+    }
+
+    function addNewAddress() {
+        closeNewAddressForm();
+    }
+    
+    function proceedToPayment() {
+    const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+    const selectedAddressRadio = document.querySelector('input[name="selectedAddress"]:checked');
+    const displayedTotal = document.querySelector('.summary-total span:last-child');
+
+    const total = displayedTotal ? displayedTotal.textContent.trim() : null;
+
+    if (selectedPaymentMethod && selectedAddressRadio && total) {
+        
+
+            const selectedAddress = selectedAddressRadio.value;
+
+            const data = {
+                paymethod: selectedPaymentMethod.value,
+                addressid: selectedAddress
+            };
+
+            if (selectedPaymentMethod.value === 'cod') {
+                // Perform a POST request to the /checkout endpoint
+                fetch('/checkout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response data as needed
+                    console.log('Success:', data);
+                    // Show the success popup
+                    showSuccessPopup();
+                })
+                .catch(error => {
+                    // Handle errors
+                    console.error('Error:', error);
+                });
+            } else {
+                alert('Please select a payment method, address, and ensure the total price is available');
+            }
+        
+    } else {
+        alert('Please select a payment method, address, and ensure the total price is available');
+    }
+}
+
+function showSuccessPopup() {
+    Swal.fire({
+        title: 'Order Placed Successfully!',
+        text: 'What would you like to do next?',
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonText: 'View Orders',
+        cancelButtonText: 'Continue Shopping'
+    }).then((result) => {
+        if (result.isConfirmed) {
+    
+        } else {
+            window.location.href = '/'; 
+              
+        }
+    });
+}
+
+
+    
+</script>
+
+<%-include('footer')%>
+
+

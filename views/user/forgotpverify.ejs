@@ -1,0 +1,181 @@
+<%-include('header')%>
+
+
+<style>
+    .forgototp {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #ffffff;
+        color: #333;
+        margin: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .forgototp .container {
+        background-color: #fff;
+        color: #333;
+        padding: 30px;
+        width: 400px;
+        text-align: center;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .forgototp form {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .forgototp h2 {
+        color: #000;
+    }
+
+    .forgototp .otp-input {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .forgototp .otp-input input {
+        width: 40px;
+        text-align: center;
+        margin: 20px 5px;
+        padding: 10px;
+        border: 2px solid #9c9c9c;
+        border-radius: 8px;
+        font-size: 18px;
+    }
+
+    .forgototp button {
+        margin-top: 15px;
+        background-color: #000;
+        color: #fff;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 16px;
+    }
+
+    .forgototp button:hover {
+        background-color: #666464;
+    }
+
+    .forgototp #resendBtn {
+        margin-top: 15px;
+        margin-left: 10px; /* Added margin to separate the buttons */
+        background-color: #007bff;
+        color: #fff;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 16px;
+        pointer-events: none; /* Initially disabled */
+    }
+</style>
+
+<div class="forgototp">
+    <div class="container">
+        <h2>Enter OTP</h2>
+        <form >
+            <div class="otp-input">
+                <input type="text" name="digit1" maxlength="1" oninput="moveToNextOrPrev(this, 'digit2', 'digit1')" onkeydown="handleBackspace(this, 'digit1')" required>
+                <input type="text" name="digit2" maxlength="1" oninput="moveToNextOrPrev(this, 'digit3', 'digit2')" onkeydown="handleBackspace(this, 'digit1')" required>
+                <input type="text" name="digit3" maxlength="1" oninput="moveToNextOrPrev(this, 'digit4', 'digit3')" onkeydown="handleBackspace(this, 'digit2')" required>
+                <input type="text" name="digit4" maxlength="1" oninput="moveToNextOrPrev(this, 'digit5', 'digit4')" onkeydown="handleBackspace(this, 'digit3')" required>
+                <input type="text" name="digit5" maxlength="1" oninput="moveToNextOrPrev(this, 'digit6', 'digit5')" onkeydown="handleBackspace(this, 'digit4')" required>
+                <input type="text" name="digit6" maxlength="1" oninput="moveToNextOrPrev(this, null, 'digit6')" onkeydown="handleBackspace(this, 'digit5')" required>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <button type="button"  onclick="submitOTP()">Submit OTP</button>
+                <button id="resendBtn" onclick="resendOTP()">Resend OTP</button>
+            </div>
+        </form>
+        <p id="timer"></p>
+    </div>
+</div>
+    
+    <script>
+        function moveToNextOrPrev(currentInput, nextInputName, prevInputName) {
+            const maxLength = parseInt(currentInput.getAttribute('maxlength'));
+            const currentLength = currentInput.value.length;
+
+            if (currentLength === maxLength && nextInputName) {
+                const nextInput = document.getElementsByName(nextInputName)[0];
+                nextInput.focus();
+            } else if (currentLength === 0 && prevInputName) {
+                const prevInput = document.getElementsByName(prevInputName)[0];
+                prevInput.focus();
+            }
+        }
+
+        function handleBackspace(currentInput, prevInputName) {
+            const isBackspacePressed = event && event.code === 'Backspace';
+            const currentLength = currentInput.value.length;
+
+            if (currentLength === 0 && prevInputName && isBackspacePressed) {
+                const prevInput = document.getElementsByName(prevInputName)[0];
+                prevInput.focus();
+            }
+        }
+        let timer;
+    let timeLeft = 60; // Initial timer value in seconds
+
+    function startTimer() {
+        timer = setInterval(function() {
+            document.getElementById('timer').innerText = `Resend in ${timeLeft} seconds`;
+            timeLeft--;
+
+            if (timeLeft < 0) {
+                clearInterval(timer);
+                document.getElementById('resendBtn').innerText = 'Resend OTP';
+                document.getElementById('resendBtn').removeAttribute('disabled');
+            }
+        }, 1000);
+    }
+
+    function submitOTP() {
+        const otpFields = document.querySelectorAll('.otp-input input');
+        const otp = Array.from(otpFields).map(field => field.value).join('');
+
+        fetch('/otpverify',{
+            method: 'POST',
+            headers:{
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({otp})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success){
+                window.location.href = "/changepass"
+            }
+        })
+        .catch(error => console.error("error:", error))
+    }
+
+    function resendOTP() {
+        // Simulate OTP sending logic
+        alert('Resending OTP...');
+
+        // Disable the resend button
+        document.getElementById('resendBtn').setAttribute('disabled', 'true');
+
+        // Reset the timer and start it again
+        timeLeft = 60;
+        startTimer();
+    }
+
+    // Start the initial timer
+    startTimer();
+    </script>
+
+
+<%-include('footer')%>
+
