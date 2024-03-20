@@ -626,6 +626,13 @@ const addcouponpost = async (req, res) => {
             return res.status(400).json({ error: 'Coupon code already exists' });
         }
 
+        if (discount<100 ){
+            return res.status(400).json({error : "coupon discount exceeds" })
+    }
+        if(expirationDate > new Date()){
+            return res.status(400).json({error : "date  exceeds" })
+        }
+
 
         const newCoupon = new Coupon({
             code,
