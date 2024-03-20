@@ -1365,7 +1365,7 @@ async function addaddress (){
 function initializeRazorpay() {
     
     const amount = document.getElementById('addmoney').value
-    const enteredAmount = parseInt(amount)
+    const enteredAmount = parseInt(amount) * 100
    
     const errorContainer = document.getElementById('error-container');
 
@@ -1381,7 +1381,7 @@ function initializeRazorpay() {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ amount: 100, currency: 'INR' }),
+    body: JSON.stringify({ amount: enteredAmount, currency: 'INR' }),
   })
   .then(response => response.json())
   .then(data => {
@@ -1471,7 +1471,7 @@ function initializeRazorpay() {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ amount: totalprice, currency: 'INR' }), // Adjust amount and currency as needed
+    body: JSON.stringify({ amount: totalprice * 100, currency: 'INR' }), // Adjust amount and currency as needed
   })
     .then(response => response.json())
     .then(data => {

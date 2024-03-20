@@ -60,16 +60,16 @@ app.use('/admin',adminrouter)
 
 // Error handling middleware
 
-app.use((req, res, next) => {
-  next(createError(404)); // Forward to the error handler
-});
+// app.use((req, res, next) => {
+//   next(createError(404)); // Forward to the error handler
+// });
 
-app.use((err, req, res, next) => {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-  res.status(err.status || 500);
-  res.render('error');
-});
+// app.use((err, req, res, next) => {
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get('env') === 'development' ? err : {};
+//   res.status(err.status || 500);
+//   res.render('error/error');
+// });
 
 app.listen(PORT,()=>{
     console.log(`http://localhost:${PORT}`);

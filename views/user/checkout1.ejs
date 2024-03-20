@@ -536,7 +536,7 @@ function order(selectedPaymentMethod, selectedAddressid) {
 
 
 function initializeRazorpay(dataa) {
-  const totalprice = totalPrice / 10;
+  const totalprice = totalPrice * 100;
   console.log(totalprice);
 
   // Fetch the order ID from your server
@@ -545,7 +545,7 @@ function initializeRazorpay(dataa) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ amount: 200, currency: 'INR' }), // Adjust amount and currency as needed
+    body: JSON.stringify({ amount: totalprice, currency: 'INR' }), // Adjust amount and currency as needed
   })
     .then(response => response.json())
     .then(data => {

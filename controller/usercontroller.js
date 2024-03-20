@@ -351,7 +351,12 @@ const cart = async (req, res) => {
         // Assuming you fetch the cart data from the database or another source
         const userId = req.session.user;
         const cart = await Cart.findOne({ user: userId }).populate('items.product couponused.couponid');
-        const coupons = await Coupon.find({status : 'active'})
+        
+        const coupons = await Coupon.find({
+            status: 'active',
+            $expr: { $lt: ['$usedCount', '$usageLimit'] } // Filter out coupons where usedCount is less than usageLimit
+        });
+
         console.log(cart)
         let itemsubtotal
         if(cart){
@@ -543,6 +548,9 @@ const add_address = async(req,res)=>{
   }
 
 }
+
+
+
 const checkoutpay = async (req, res) => {
     try {
         const { addressid, paymethod , Paymentstatus } = req.body;
@@ -586,7 +594,14 @@ const checkoutpay = async (req, res) => {
 
           const couponId = cart.couponused.couponid;
           const coupon = await Coupon.findById(couponId);
-          
+
+          if (coupon) {
+            coupon.usedCount += 1;
+            await coupon.save();    
+        }
+
+        // Increment the usage count of the coupon
+      
   
         //   if (!coupon) {
         //       return res.status(404).json({ error: 'Coupon not found' });
