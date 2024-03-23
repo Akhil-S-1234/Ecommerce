@@ -235,7 +235,7 @@ const cancelorder = async (req, res) => {
             
 
         console.log('orderId:', orderId);
-    console.log('itemId:', itemId);
+        console.log('itemId:', itemId);
         const order = await Order.findOne({ _id: orderId });
         const User = await user.findOne({ _id: userId });
         console.log(order);
@@ -256,7 +256,7 @@ const cancelorder = async (req, res) => {
         
          if(status=='cancelled'){
            
-        if(order.paymentMethod=='razorpay' || order.paymentMethod=='wallet'){
+        if(order.paymentMethod == 'razorpay' || order.paymentMethod == 'wallet'){
                
             //    User.wallet.balance += (itemToCancel.unitPrice * itemToCancel.quantity)
             User.wallet.balance += (itemToCancel.unitPrice * itemToCancel.quantity) * (1 - order.discount.percent / 100);

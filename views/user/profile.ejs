@@ -1484,8 +1484,7 @@ function initializeRazorpay() {
         image: 'https://example.com/your_logo',
         order_id: data.orderId,
         handler: function (response) {
-          // Handle successful payment
-            // Payment successful
+          
             console.log('Payment successful! Payment ID:', response.razorpay_payment_id);
             fetch('/failedpay', {
               method: 'POST',
@@ -1497,7 +1496,6 @@ function initializeRazorpay() {
               .then(response => response.json())
               .then(data => {
                 console.log('Success:', data);
-                // Show the success popup
                 window.location.reload()
               })
               .catch(error => {
@@ -1519,32 +1517,7 @@ function initializeRazorpay() {
 
       const rzp = new Razorpay(options);
 
-      // Open the Razorpay payment modal when the radio button is selected
       rzp.open();
-
-      // Handle payment failed event
-    //   rzp.on('payment.failed', function (response) {
-    //     console.error('Payment failed with error:', response);
-    //     fetch('/checkout', {
-    //           method: 'POST',
-    //           headers: {
-    //             'Content-Type': 'application/json',
-    //           },
-    //           body: JSON.stringify({ ...dataa, Paymentstatus: 'failed' }),
-    //         })
-    //           .then(response => response.json())
-    //           .then(data => {
-    //             console.log('Success:', data);
-    //              rzp.close();
-
-    //             handlePaymentFailure(response);
-    //           })
-    //           .catch(error => {
-    //             console.error('Error:', error);
-    //           });
-       
-    //   });
-
     })
     .catch(error => {
       console.error('Error:', error);

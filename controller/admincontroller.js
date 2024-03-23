@@ -353,7 +353,7 @@ const productstatus = async (req, res) => {
         const prod = await product.findById(proid);
 
         if (!prod) {
-            return res.status(404).json({ error: 'Category not found' });
+            return res.status(404).json({ error: 'product not found' });
         }
 
         prod.isListed = !prod.isListed;
@@ -626,12 +626,6 @@ const addcouponpost = async (req, res) => {
             return res.status(400).json({ error: 'Coupon code already exists' });
         }
 
-        if (discount<100 ){
-            return res.status(400).json({error : "coupon discount exceeds" })
-    }
-        if(expirationDate > new Date()){
-            return res.status(400).json({error : "date  exceeds" })
-        }
 
 
         const newCoupon = new Coupon({
